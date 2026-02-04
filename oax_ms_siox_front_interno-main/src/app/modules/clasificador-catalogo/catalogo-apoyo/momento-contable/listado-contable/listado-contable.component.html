@@ -1,0 +1,132 @@
+<!-- Alerta genérica arriba a la derecha -->
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+
+<!-- Contenedor de confirmaciones -->
+<app-confirmation-container></app-confirmation-container>
+
+<!-- TIPO DE PÓLIZA (solo UI por ahora) -->
+<ng-template #tipoPolizaTemplate let-row="row">
+  <span>DIARIO</span>
+</ng-template>
+
+<!-- ES PRESUPUESTAL (switch como imagen) -->
+<ng-template #presupuestalTemplate let-row="row">
+  <nz-switch
+    [ngModel]="row.estatus"
+    nzCheckedChildren="SI"
+    nzUnCheckedChildren="NO"
+    [nzDisabled]="false"
+  ></nz-switch>
+</ng-template>
+
+<!-- EDITAR -->
+<ng-template #editarTemplate let-row="row">
+  <button
+    nz-button
+    nzType="text"
+    nz-tooltip
+    nzTooltipTitle="Editar"
+    (click)="editarGenero(row)"
+    title="Editar"
+    class="action-btn-edit"
+  >
+    <i nz-icon nzType="edit" nzTheme="outline"></i>
+  </button>
+</ng-template>
+
+<!-- ELIMINAR -->
+<ng-template #eliminarTemplate let-row="row">
+  <button
+    nz-button
+    nzType="text"
+    nz-tooltip
+    nzTooltipTitle="Eliminar"
+    (click)="eliminarMomento(row)"
+    title="Eliminar"
+    class="action-btn-delete"
+  >
+    <i nz-icon nzType="delete" nzTheme="outline"></i>
+  </button>
+</ng-template>
+
+<!-- Barra superior -->
+<div class="header-bar">
+  <h2 class="page-title">MOMENTO CONTABLE</h2>
+
+  <div class="action-buttons">
+    <div class="button-row">
+      <button
+        nz-button
+        class="btn-nuevo"
+        (click)="nuevoMomento()"
+        nz-tooltip
+        nzTooltipTitle="Nuevo momento contable"
+      >
+        <i nz-icon nzType="plus"></i>
+        NUEVO MOMENTO
+      </button>
+    </div>
+
+    <div class="botones-secundarios">
+      <button
+        class="icon-button"
+        title="Actualizar"
+        (click)="actualizarTabla()"
+        nz-tooltip
+        nzTooltipTitle="Actualizar datos de la tabla"
+      >
+        <i nz-icon nzType="redo" nzTheme="outline"></i>
+      </button>
+
+      <button
+        class="icon-button"
+        title="Exportar Excel"
+        (click)="exportarExcel()"
+        nz-tooltip
+        nzTooltipTitle="Exportar Registros a Excel"
+      >
+        <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+      </button>
+
+      <button
+        class="icon-button"
+        title="Exportar PDF"
+        (click)="exportarPdf()"
+        nz-tooltip
+        nzTooltipTitle="Exportar Registros a PDF"
+      >
+        <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<!-- Tabla -->
+<app-dynamic-table #tabla
+  [data]="data"
+  [columns]="colsGenero"
+  [pageSize]="pageSize"
+  [pageIndex]="getPageIndexForTable()"
+  [frontPagination]="false"
+  [total]="total"
+  [scrollX]="'1200px'"
+  (sortChange)="onSortChange($event)"
+  (filterChange)="onFiltroServicioChange($event)"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+>
+</app-dynamic-table>
+
+

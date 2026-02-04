@@ -1,0 +1,177 @@
+.validate-2fa-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.validate-card-wrapper {
+  width: 100%;
+  max-width: 500px;
+}
+
+.validate-card {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  
+  ::ng-deep .ant-card-body {
+    padding: 40px 30px;
+  }
+}
+
+.validate-header {
+  text-align: center;
+  margin-bottom: 30px;
+
+  .icon-container {
+    margin-bottom: 20px;
+
+    .validate-icon {
+      font-size: 52px;
+      color: #52c41a;
+    }
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1f1f1f;
+  }
+
+  .subtitle {
+    margin: 8px 0;
+    color: #8c8c8c;
+    font-size: 14px;
+  }
+
+  .user-email {
+    margin: 0;
+    color: #667eea;
+    font-size: 15px;
+    font-weight: 500;
+  }
+}
+
+.error-alert {
+  margin-bottom: 20px;
+}
+
+.validate-form {
+  nz-form-item {
+    margin-bottom: 24px;
+  }
+
+  nz-form-label {
+    font-weight: 500;
+  }
+
+  .code-input {
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 8px;
+    font-weight: 600;
+  }
+
+  .instructions {
+    background-color: #f0f5ff;
+    border: 1px solid #adc6ff;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 24px;
+
+    p {
+      margin: 0;
+      color: #1d39c4;
+      font-size: 13px;
+      line-height: 1.6;
+
+      i {
+        margin-right: 8px;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .validate-form-buttons {
+    margin-bottom: 0;
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+
+      button {
+        flex: 1;
+        height: 42px;
+        font-size: 15px;
+        font-weight: 500;
+        border-radius: 6px;
+
+        &[nzType="primary"] {
+          flex: 1.5;
+        }
+      }
+    }
+  }
+}
+
+.validate-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+
+  .help-text {
+    text-align: center;
+    color: #8c8c8c;
+    font-size: 13px;
+    margin: 0;
+
+    i {
+      margin-right: 6px;
+    }
+
+    a {
+      color: #667eea;
+      font-weight: 500;
+
+      &:hover {
+        color: #764ba2;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .validate-card {
+    ::ng-deep .ant-card-body {
+      padding: 30px 20px;
+    }
+  }
+
+  .validate-header {
+    h1 {
+      font-size: 22px;
+    }
+  }
+
+  .validate-form {
+    .code-input {
+      font-size: 20px;
+      letter-spacing: 6px;
+    }
+
+    .validate-form-buttons {
+      .button-group {
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

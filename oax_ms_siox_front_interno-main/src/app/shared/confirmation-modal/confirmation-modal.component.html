@@ -1,0 +1,42 @@
+<nz-modal
+  [(nzVisible)]="visible"
+  (nzVisibleChange)="onVisibleChange($event)"
+  (nzOnCancel)="onCancel()"
+  [nzTitle]="config.title"
+  [nzWidth]="config.width ?? 520"
+  [nzFooter]="footerTemplate"
+  [nzClosable]="true"
+  [nzMaskClosable]="false"
+  nzCentered
+  [nzContent]="modalContent">
+</nz-modal>
+
+<ng-template #modalContent>
+  
+    
+    <div> {{ config.message }}</div>
+  
+  
+</ng-template>
+
+<ng-template #footerTemplate>
+  <div class="modal-footer">
+    <button 
+      nz-button 
+      nzType="default" 
+      class="cancel-btn"
+      (click)="onCancel()"
+      [disabled]="loading">
+      {{ config.cancelText }}
+    </button>
+    <button 
+      nz-button 
+      nzType="primary"
+      [nzDanger]="config.type === 'error'"
+      class="confirm-btn"
+      (click)="onConfirm()"
+      [nzLoading]="loading">
+      {{ config.confirmText }}
+    </button>
+  </div>
+</ng-template>

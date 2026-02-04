@@ -1,0 +1,153 @@
+
+
+
+<div class="formulario-generico">
+  <h2>{{ config.titulo }}</h2>
+  <form nz-form [formGroup]="formGroup">
+    <ng-container *ngFor="let seccion of config.secciones">
+      <div class="seccion">
+        <h3>{{ seccion.titulo }}</h3>
+        <div class="campos">
+          <ng-container *ngFor="let campo of seccion.campos">
+            <div *ngIf="campo.formControlName === 'descripcionConcepto'" class="campo campo-descripcion">
+              <ng-container [ngSwitch]="campo.tipo">
+                <ng-container *ngSwitchCase="'input'">
+                  <nz-form-item>
+                    <nz-form-label [nzRequired]="campo.required">{{ campo.label }}</nz-form-label>
+                    <nz-form-control
+                      [nzValidateStatus]="formGroup.get(campo.formControlName)"
+                      [nzErrorTip]="errorTpl">
+                      <input nz-input [formControlName]="campo.formControlName" [placeholder]="campo.placeholder ?? ''" [maxlength]="campo.maxLength ?? null"
+                        (keypress)="esCampoClave(campo.formControlName) ? soloAlfanumerico($event) : null" />
+                    </nz-form-control>
+                    <ng-template #errorTpl>
+                      <ng-container *ngIf="formGroup.get(campo.formControlName)?.errors && (formGroup.get(campo.formControlName)?.dirty || formGroup.get(campo.formControlName)?.touched)">
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['required']" class="error">Este campo es obligatorio.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['maxlength']" class="error">El campo debe contener máximo 250 caracteres.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['minlength']" class="error">El campo debe contener mínimo 5 caracteres.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['pattern'] && esCampoClave(campo.formControlName)" class="error">Solo se permiten letras mayúsculas (A-Z) y números (0-9).</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['formato']" class="error">Formato de fecha inválido. Debe ser DD/MM/AAAA.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['inicioMenorActual']" class="error">La fecha de inicio debe ser mayor o igual  a la fecha actual.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['inicioMayorFin']" class="error">La fecha de inicio no puede ser mayor a la fecha fin.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['finMenorActual']" class="error">La fecha de fin debe ser mayor a la fecha actual.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['finMenorIgualInicio']" class="error">La fecha de fin debe ser mayor a la fecha de inicio.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['anioDistintoEjercicio']" class="error">El año debe ser igual al ejercicio seleccionado.</div>
+                      </ng-container>
+                    </ng-template>
+                  </nz-form-item>
+                </ng-container>
+              </ng-container>
+            </div>
+            <div *ngIf="campo.formControlName === 'inicioVigencia' || campo.formControlName === 'finVigencia'" class="campo campo-fecha">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="campo.required">{{ campo.label }}</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="formGroup.get(campo.formControlName)"
+                  [nzErrorTip]="errorTpl">
+                  <nz-date-picker
+                    [formControlName]="campo.formControlName"
+                    nzFormat="dd/MM/yyyy"
+                    nzPlaceHolder="DD/MM/AAAA"
+                    [nzInputReadOnly]="true"
+                    style="width: 100%;"
+                  ></nz-date-picker>
+                </nz-form-control>
+                <ng-template #errorTpl>
+                  <ng-container *ngIf="formGroup.get(campo.formControlName)?.errors && (formGroup.get(campo.formControlName)?.dirty || formGroup.get(campo.formControlName)?.touched)">
+                    <div *ngIf="formGroup.get(campo.formControlName)?.errors['required']" class="error">Este campo es obligatorio.</div>
+                    <div *ngIf="formGroup.get(campo.formControlName)?.errors['formato']" class="error">Formato de fecha inválido. Debe ser DD/MM/AAAA.</div>
+                    <div *ngIf="formGroup.get(campo.formControlName)?.errors['inicioMenorActual']" class="error">La fecha de inicio debe ser mayor o igual  a la fecha actual.</div>
+                    <div *ngIf="formGroup.get(campo.formControlName)?.errors['inicioMayorFin']" class="error">La fecha de inicio no puede ser mayor a la fecha fin.</div>
+                    <div *ngIf="formGroup.get(campo.formControlName)?.errors['finMenorActual']" class="error">La fecha de fin debe ser mayor a la fecha actual.</div>
+                    <div *ngIf="formGroup.get(campo.formControlName)?.errors['finMenorIgualInicio']" class="error">La fecha de fin debe ser mayor a la fecha de inicio.</div>
+                    <div *ngIf="formGroup.get(campo.formControlName)?.errors['anioDistintoEjercicio']" class="error">El año debe ser igual al ejercicio seleccionado.</div>
+                  </ng-container>
+                </ng-template>
+              </nz-form-item>
+            </div>
+            <!-- Campos especiales: naturaleza, estadoFinanciero, posicion, estructura -->
+            <div *ngIf="campo.formControlName === 'naturaleza' || campo.formControlName === 'estadoFinanciero' || campo.formControlName === 'posicion' || campo.formControlName === 'estructura'" class="campo campo-select-especial">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="campo.required">{{ campo.label }}</nz-form-label>
+                <nz-form-control
+                  [nzValidateStatus]="formGroup.get(campo.formControlName)"
+                  [nzErrorTip]="errorTplSelectEspecial">
+                  <nz-select 
+                    [formControlName]="campo.formControlName" 
+                    [nzPlaceHolder]="campo.placeholder ?? 'SELECCIONE'"
+                    nzShowSearch
+                    nzAllowClear>
+                    <nz-option 
+                      *ngFor="let opcion of campo.opciones ?? []" 
+                      [nzValue]="opcion.value" 
+                      [nzLabel]="opcion.label">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+                <ng-template #errorTplSelectEspecial>
+                  <ng-container *ngIf="formGroup.get(campo.formControlName)?.errors && (formGroup.get(campo.formControlName)?.dirty || formGroup.get(campo.formControlName)?.touched)">
+                    <div *ngIf="formGroup.get(campo.formControlName)?.errors['required']" class="error">Este campo es obligatorio.</div>
+                  </ng-container>
+                </ng-template>
+              </nz-form-item>
+            </div>
+            <!-- Campos normales -->
+            <div *ngIf="campo.formControlName !== 'descripcionConcepto' && campo.formControlName !== 'inicioVigencia' && campo.formControlName !== 'finVigencia' && campo.formControlName !== 'naturaleza' && campo.formControlName !== 'estadoFinanciero' && campo.formControlName !== 'posicion' && campo.formControlName !== 'estructura'" class="campo">
+              <ng-container [ngSwitch]="campo.tipo">
+                <ng-container *ngSwitchCase="'input'">
+                  <nz-form-item>
+                    <nz-form-label [nzRequired]="campo.required">{{ campo.label }}</nz-form-label>
+                    <nz-form-control
+                      [nzValidateStatus]="formGroup.get(campo.formControlName)"
+                      [nzErrorTip]="errorTpl">
+                      <input nz-input [formControlName]="campo.formControlName" [placeholder]="campo.placeholder ?? ''" [maxlength]="campo.maxLength ?? null"
+                        [disabled]="campo.disabled ?? false"
+                        (keypress)="esCampoClave(campo.formControlName) ? soloAlfanumerico($event) : null" />
+                    </nz-form-control>
+                    <ng-template #errorTpl>
+                      <ng-container *ngIf="formGroup.get(campo.formControlName)?.errors && (formGroup.get(campo.formControlName)?.dirty || formGroup.get(campo.formControlName)?.touched)">
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['required']" class="error">Este campo es obligatorio.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['maxlength']" class="error">El campo debe contener máximo 250 caracteres.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['minlength']" class="error">El campo debe contener mínimo 5 caracteres.</div>
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['pattern'] && esCampoClave(campo.formControlName)" class="error">Solo se permiten letras mayúsculas (A-Z) y números (0-9).</div>
+                      </ng-container>
+                    </ng-template>
+                  </nz-form-item>
+                </ng-container>
+                <ng-container *ngSwitchCase="'select'">
+                  <nz-form-item>
+                    <nz-form-label [nzRequired]="campo.required">{{ campo.label }}</nz-form-label>
+                    <nz-form-control
+                      [nzValidateStatus]="formGroup.get(campo.formControlName)"
+                      [nzErrorTip]="errorTplSelect">
+                      <nz-select [formControlName]="campo.formControlName" [nzPlaceHolder]="campo.placeholder ?? ''">
+                        <nz-option *ngFor="let opcion of campo.opciones ?? []" [nzValue]="opcion.value" [nzLabel]="opcion.label"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                    <ng-template #errorTplSelect>
+                      <ng-container *ngIf="formGroup.get(campo.formControlName)?.errors && (formGroup.get(campo.formControlName)?.dirty || formGroup.get(campo.formControlName)?.touched)">
+                        <div *ngIf="formGroup.get(campo.formControlName)?.errors['required']" class="error">Este campo es obligatorio.</div>
+                      </ng-container>
+                    </ng-template>
+                  </nz-form-item>
+                </ng-container>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="botones">
+      <button *ngFor="let btn of config.botones"
+        nz-button
+        [nzType]="btn.tipo === 'primary' ? 'primary' : 'default'"
+        type="button"
+        (click)="onAccion(btn.accion)">
+        {{ btn.label }}
+      </button>
+    </div>
+ 
+  </form>
+    
+</div>

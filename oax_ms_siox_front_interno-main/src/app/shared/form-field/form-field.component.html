@@ -1,0 +1,64 @@
+<div class="form-field">
+  <!-- Label con asterisco si es requerido -->
+  <label class="field-label">
+    {{ label }}<span class="required" *ngIf="required">*</span>
+  </label>
+
+  <!-- Input con icono para limpiar -->
+  <div class="input-container">
+    <input
+      nz-input
+      [type]="type"
+      [placeholder]="placeholder"
+      [value]="value"
+      [attr.maxlength]="maxLength"
+      [disabled]="disabled"
+      [readonly]="readonly"
+      [attr.inputmode]="inputMode || 'text'"
+      [class.input-error]="isFieldInvalid()"
+      (input)="onInput($event)"
+      (keydown)="onKeyDown($event)"
+      (blur)="onBlur()"
+    />
+    
+    <!-- Contador de caracteres JUNTO a los iconos -->
+    <div class="char-counter-inline" *ngIf="maxLength">
+      {{ getCurrentLength() }}/{{ maxLength }}
+    </div>
+    
+    <!-- Botón para limpiar el input -->
+    <button
+      *ngIf="allowClear && value && !disabled && !readonly"
+      type="button"
+      class="clear-button"
+      (click)="clearInput()"
+      tabindex="-1"
+    >
+      <i nz-icon nzType="close" nzTheme="outline"></i>
+    </button>
+
+    <!-- Icono de error -->
+    <i
+      *ngIf="isFieldInvalid()"
+      nz-icon
+      nzType="exclamation-circle"
+      nzTheme="fill"
+      class="error-icon"
+    ></i>
+  </div>
+
+  <!-- Contador de caracteres y mensajes de error -->
+  <div class="error-and-counter">
+    <!-- Mensajes de error múltiples -->
+    <div class="error-messages" *ngIf="isFieldInvalid()">
+      <div class="error-message" *ngFor="let errorMsg of getErrorMessages()">
+        {{ errorMsg }}
+      </div>
+    </div>
+
+    <!-- Mensaje informativo cuando se alcanza el límite (no es error) -->
+    <div class="info-message" *ngIf="shouldShowLimitMessage()">
+      SE ALCANZÓ EL MÁXIMO DE {{ maxLength }} CARACTERES.
+    </div>
+  </div>
+</div>

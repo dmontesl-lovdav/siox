@@ -1,0 +1,121 @@
+/* listado-vialidad.component.scss */
+/* Usa variables globales: ver src/styles/_tokens-custom.scss */
+
+/* Título principal (como el ejemplo de género) */
+.page-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #c17a3a;
+  text-transform: uppercase;
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+}
+
+/* ============ Barra superior (MISMO PATRÓN QUE GÉNERO) ============ */
+.header-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  margin-left: 0;
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      height: 42px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font-sans, 'Montserrat', sans-serif);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 1px;
+    }
+
+    /* Botón principal */
+    .btn-nuevo {
+      width: 180px;
+      background-color: var(--btn-primary-bg, #0d5a4a);
+      color: var(--btn-primary-fg, #ffffff);
+      border: none;
+
+      i {
+        color: var(--btn-primary-fg, #ffffff);
+      }
+
+      &:hover {
+        background-color: var(--btn-primary-hover-bg, #0a4838);
+        opacity: 0.9;
+      }
+    }
+
+    /* Icon buttons secundarios */
+    .botones-secundarios {
+      display: flex;
+      gap: 10px;
+
+      .icon-button {
+        width: 30px;
+        height: 30px;
+        border: 1px solid var(--icon-button-border, #0d5a4a);
+        background-color: transparent;
+        border-radius: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        i {
+          font-size: 18px;
+          color: var(--icon-button-fg, #0d5a4a);
+        }
+
+        &:hover {
+          background-color: var(--icon-button-hover-bg, #f0f0f0);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .header-bar {
+    gap: 24px;
+    margin-left: 24px;
+  }
+}
+
+/* ALERTA: se deja IGUAL */
+.alert-top-right {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.alert-animate {
+  animation: slideInRight 0.3s ease-in-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

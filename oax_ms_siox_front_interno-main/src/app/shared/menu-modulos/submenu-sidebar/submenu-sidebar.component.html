@@ -1,0 +1,64 @@
+<div *ngIf="modulo" class="sidebar-container">
+  <div class="modulo-header" (click)="cerrarSubmenu()">
+    <i nz-icon nzType="appstore" class="modulo-icon"></i>
+    <span class="modulo-titulo">{{ modulo.titulo }}</span>
+  </div>
+
+  <div *ngFor="let categoria of modulo.categorias" class="categoria">
+    <div class="categoria-header" (click)="toggleCategoria(categoria)">
+      <span class="categoria-nombre" [class.expandida]="categoriaExpandida === categoria">
+        {{ categoria.nombre }}
+      </span>
+
+      <i nz-icon [nzType]="categoriaExpandida === categoria ? 'up' : 'down'"></i>
+    </div>
+
+<!-- Subopciones -->
+<div class="subopciones" *ngIf="categoriaExpandida === categoria">
+  <ng-container *ngFor="let sub of categoria.subopciones">
+    <ng-container *ngTemplateOutlet="recursiveMenu; context: { $implicit: sub, nivel: 0, padres: [] }"></ng-container>
+  </ng-container>
+</div>
+
+<!-- Template recursivo para manejar múltiples niveles -->
+<ng-template #recursiveMenu let-opcion let-nivel="nivel" let-padres="padres">
+  <div class="subopcion" [style.padding-left.px]="nivel * 15">
+    <!-- Si tiene ruta y NO tiene hijas, es navegable -->
+    <div
+      *ngIf="opcion.ruta && !opcion.subopcionesInternas?.length; else expandible"
+      class="sub-header"
+      (click)="navegar(modulo!, categoriaExpandida!, buildOpcionesArray(padres, opcion))"
+    >
+      {{ opcion.nombre }}
+    </div>
+
+    <!-- Si tiene hijas o no tiene ruta, es expandible -->
+    <ng-template #expandible>
+      <div
+        class="sub-header"
+        [class.activa]="isPathExpanded(opcion.nombre)"
+        (click)="opcion.subopcionesInternas?.length ? togglePath(opcion.nombre) : null"
+      >
+        {{ opcion.nombre }}
+        <i
+          nz-icon
+          [nzType]="isPathExpanded(opcion.nombre) ? 'up' : 'down'"
+          *ngIf="opcion.subopcionesInternas?.length"
+        ></i>
+      </div>
+
+      <!-- Renderizar hijas recursivamente -->
+      <div
+        class="sub-subopciones"
+        *ngIf="isPathExpanded(opcion.nombre) && opcion.subopcionesInternas?.length"
+      >
+        <ng-container *ngFor="let subint of opcion.subopcionesInternas">
+          <ng-container *ngTemplateOutlet="recursiveMenu; context: { $implicit: subint, nivel: nivel + 1, padres: buildOpcionesArray(padres, opcion) }"></ng-container>
+        </ng-container>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>
+
+  </div>
+</div>

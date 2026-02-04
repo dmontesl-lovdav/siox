@@ -1,0 +1,183 @@
+/* clasificador-rubro-ingreso.component.scss */
+/* Usa variables globales: ver src/styles/_tokens-custom.scss */
+
+.titulo-cri {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: var(--brand-2);
+  padding-left: 80px;
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+}
+
+/* ============ Barra superior ============ */
+.header-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 400px;
+  margin-bottom: 24px;
+  margin-left: 80px;
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+
+  /* Selector de ejercicio */
+  .input-wrapper {
+    position: relative;
+    width: 200px;
+
+    /* nz-select de ejercicio */
+    .select-ejercicio {
+      width: 90%;
+    }
+
+    /* Ajuste visual del nz-select solamente dentro de esta barra */
+    ::ng-deep .select-ejercicio.ant-select .ant-select-selector {
+      height: 36px;
+      border: 1px solid var(--text-muted);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      background: var(--surface);
+      color: var(--text);
+    }
+    ::ng-deep .select-ejercicio .ant-select-selection-item,
+    ::ng-deep .select-ejercicio .ant-select-selection-placeholder {
+      line-height: 34px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    ::ng-deep .select-ejercicio.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+      border-color: var(--brand-2);
+    }
+    ::ng-deep .select-ejercicio.ant-select-focused .ant-select-selector {
+      border-color: var(--brand-2);
+      box-shadow: 0 0 0 2px var(--ring);
+    }
+  }
+
+  /* Botones de acción (igual al diseño que me pasaste) */
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      height: 42px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font-sans, 'Montserrat', sans-serif);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 1px;
+    }
+
+    /* Carga masiva */
+    .btn-carga-masiva {
+      width: 214px;
+      background-color: var(--btn-mass-bg);
+      color: var(--btn-mass-fg);
+      border: 1px solid var(--btn-mass-border);
+
+      i { color: var(--btn-mass-fg); }
+
+      &:hover { background-color: var(--btn-mass-hover-bg); }
+    }
+
+    /* Nuevo (alias para mantener compatibilidad con lo anterior) */
+    .btn-nuevo,
+    .btn-nuevo-conac {
+      width: 156px;
+      background-color: var(--btn-primary-bg, var(--brand));
+      color: var(--btn-primary-fg, var(--on-brand));
+      border: none;
+
+      i { color: var(--btn-primary-fg, var(--on-brand)); }
+
+      &:hover { background-color: var(--btn-primary-hover-bg); }
+    }
+
+    /* Icon buttons secundarios */
+    .botones-secundarios {
+      display: flex;
+      gap: 10px;
+
+      .icon-button {
+        width: 30px;
+        height: 30px;
+        border: 1px solid var(--icon-button-border, var(--brand-2));
+        background-color: transparent;
+        border-radius: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        i { font-size: 18px; color: var(--icon-button-fg, var(--brand-2)); }
+
+        &:hover { background-color: var(--icon-button-hover-bg, var(--surface-weak)); }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .header-bar {
+    gap: 24px;
+    margin-left: 24px;
+  }
+  .titulo-cri {
+    padding-left: 24px;
+  }
+}
+.alert-top-right {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 2000;
+  min-width: 320px;
+  max-width: 400px;
+}
+
+// Table action buttons styling
+:host ::ng-deep {
+  .action-btn-edit {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    min-width: 30px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #285C4D !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 4px;
+    background-color: #f5f5f5 !important;
+    transition: all 0.3s ease;
+    
+    i {
+      font-size: 14px !important;
+      margin: 0 !important;
+    }
+    
+    &:hover {
+      background-color: #efefef !important;
+      border-color: #b3b3b3 !important;
+    }
+    
+    &:focus {
+      color: #285C4D !important;
+      border-color: #d9d9d9 !important;
+      background-color: #f5f5f5 !important;
+    }
+  }
+}

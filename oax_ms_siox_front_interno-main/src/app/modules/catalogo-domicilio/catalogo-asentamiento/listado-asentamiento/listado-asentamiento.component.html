@@ -1,0 +1,109 @@
+<!-- Alerta genérica arriba a la derecha -->
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+
+<!-- Contenedor de confirmaciones -->
+<app-confirmation-container></app-confirmation-container>
+
+<!-- Barra superior -->
+<div class="header-bar">
+<h2 class="page-title">ADMINISTRADOR DE CATÁLOGO DE TIPO DE ASENTAMIENTO</h2>
+  
+  <!-- Botones de acción -->
+  <div class="action-buttons">
+    <div class="button-row">      <button
+        nz-button
+        class="btn-nuevo"
+        (click)="nuevoAsentamiento()"
+        nz-tooltip
+        nzTooltipTitle="Nuevo registro del catálogo de Tipo de Asentamiento"
+      >
+        <i nz-icon nzType="plus"></i>
+
+        NUEVO REGISTRO
+      </button>
+    </div>
+    <div class="botones-secundarios">
+      <button class="icon-button icon-table-buttons " title="Actualizar" (click)="actualizarTabla()" nz-tooltip nzTooltipTitle="Actualizar datos de la tabla">
+        <i nz-icon nzType="redo" nzTheme="outline"></i>
+      </button>
+      <button class="icon-button icon-table-buttons" title="Exportar Excel" (click)="exportarExcel()" nz-tooltip nzTooltipTitle="Exportar Registros a Excel">
+        <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+      </button>
+      <button class="icon-button icon-table-buttons" title="Exportar PDF" (click)="exportarPdf()" nz-tooltip nzTooltipTitle="Exportar Registros a PDF">
+        <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<br>
+
+<!-- Tabla -->
+<app-dynamic-table #tabla
+  [data]="data"
+  [columns]="colsAsentamiento"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex + 1"
+  [frontPagination]="false"
+  [total]="total"
+  [scrollX]="'1200px'"
+  (sortChange)="onSortChange($event)"
+  (filterChange)="onFiltroServicioChange($event)"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+>
+</app-dynamic-table>
+<!-- Template para acciones (editar, ver detalle) -->
+<ng-template #actionsTemplate let-row="row">
+  <button nz-tooltip nzTooltipTitle="Editar"
+    *ngIf="!row.estatus"
+    nz-button
+    nzType="text"
+    (click)="editarAsentamiento(row)"
+    title="Editar"
+    class="action-btn-edit"
+  >
+    <i nz-icon nzType="edit" nzTheme="outline"></i>
+  </button>
+  <button
+  *ngIf="row.estatus"
+  nz-tooltip nzTooltipTitle="Consultar"
+    nz-button
+    nzType="text"
+    (click)="verDetalleAsentamiento(row)"
+    title="Ver Detalle"
+    class="action-btn-view"
+  >
+    <i nz-icon nzType="eye" nzTheme="outline"></i>
+  </button>
+</ng-template>
+
+<!-- Template para columna bloqueada (candados) -->
+<ng-template #bloqueadaTemplate let-row="row">
+  <button
+    nz-button
+    nzType="text"
+    (click)="toggleBloqueo(row)"
+    [title]="row.estatus ? 'Desbloquear' : 'Bloquear'"
+    nz-tooltip
+    [nzTooltipTitle]="row.estatus ? 'Bloqueado' : 'Desbloqueado'"
+    class="action-btn-lock"
+  >
+    <i
+      nz-icon
+      [nzType]="row.estatus ? 'lock' : 'unlock'"
+      nzTheme="fill"
+    ></i>
+  </button>
+</ng-template>
+
+

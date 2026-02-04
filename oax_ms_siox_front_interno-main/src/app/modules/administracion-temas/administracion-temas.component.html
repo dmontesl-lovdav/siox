@@ -1,0 +1,97 @@
+<!-- src/app/modules/administracion-temas/administracion-temas.component.html -->
+
+<section class="page-header">
+  <h1>Administrador de temas</h1>
+  <small class="hint">
+    Ajusta colores por sección (Header, texto del header, breadcrumb, tablas, botones, etc.).
+    Los cambios se guardan en <code>localStorage</code>.
+  </small>
+</section>
+
+<hr />
+
+<section class="groups">
+  <div class="group-card"
+       *ngFor="let g of groups; trackBy: trackByGroup"
+       [class.collapsed]="g._collapsed">
+
+    <!-- Header clickable -->
+    <button type="button"
+            class="group-header"
+            (click)="toggleGroup(g)"
+            [attr.aria-expanded]="!g._collapsed">
+      <span class="group-title">{{ g.title }}</span>
+      <i nz-icon [nzType]="g._collapsed ? 'down' : 'up'"></i>
+    </button>
+
+    <!-- Contenido del grupo (se pliega) -->
+    <div class="group-body" *ngIf="!g._collapsed">
+      <div class="var-row" *ngFor="let v of g.vars; let i = index; trackBy: trackByVar">
+        <label class="var-label" [attr.for]="'clr-' + g.title + '-' + i">
+          {{ v.label }}
+        </label>
+
+        <div class="var-controls">
+          <input
+            class="var-color"
+            type="color"
+            [attr.id]="'clr-' + g.title + '-' + i"
+            [value]="getVar(v.name)"
+            (input)="setVar(v.name, $any($event.target).value)"
+          />
+
+          <input
+            class="var-text"
+            type="text"
+            [value]="getVar(v.name)"
+            (change)="setVar(v.name, $any($event.target).value)"
+            placeholder="#RRGGBB"
+          />
+
+          <span class="swatch"
+                [style.background]="getVar(v.name)"
+                [title]="getVar(v.name)"></span>
+
+          <button type="button" class="btn-reset" (click)="resetVar(v.name)">Reset</button>
+        </div>
+      </div>
+
+      <div class="group-actions">
+        <button type="button" class="btn-reset-group" (click)="resetGroup(g)">
+          Reset grupo
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<hr />
+
+<section class="actions">
+  <button type="button" class="btn" (click)="exportOverrides()">Exportar JSON</button>
+
+  <label class="btn file-btn">
+    Importar JSON
+    <input
+      type="file"
+      accept="application/json"
+      (change)="importOverrides($any($event.target).files?.[0]); $any($event.target).value='';"
+      hidden
+    />
+  </label>
+
+  <button type="button" class="btn danger" (click)="resetAll()">Restablecer todo</button>
+</section>
+
+<!-- Vista previa opcional -->
+<section class="preview">
+  <div class="preview-card">
+    <div class="preview-header">Header</div>
+    <div class="preview-body">
+      <p>Texto de ejemplo sobre superficie.</p>
+      <button class="preview-btn-primary">Botón primario</button>
+      <button class="preview-btn-mass">Carga masiva</button>
+    </div>
+  </div>
+</section>

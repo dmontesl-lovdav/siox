@@ -1,0 +1,148 @@
+
+
+
+.modal-edicion-clasificador {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 2.5rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+
+}
+
+.modal-edicion-clasificador__title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #008060;
+  margin-bottom: 1.5rem;
+}
+
+.modal-edicion-clasificador__form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 1.5rem;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.modal-edicion-clasificador__form label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.modal-edicion-clasificador__form input,
+.modal-edicion-clasificador__form textarea {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fafafa;
+  margin-bottom: 0.5rem;
+}
+
+.modal-edicion-clasificador__form .ng-invalid.ng-touched {
+  border-color: #e53e3e;
+}
+
+.modal-edicion-clasificador__actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.modal-edicion-clasificador__btn {
+  padding: 0.7rem 2.2rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.modal-edicion-clasificador__btn--cancelar {
+  background: #f3f4f6;
+  color: #333;
+}
+
+.modal-edicion-clasificador__btn--guardar {
+  background: #008060;
+  color: #fff;
+}
+
+.modal-edicion-clasificador__btn--guardar:hover {
+  background: #00694d;
+}
+
+.modal-title {
+  color: #15805c;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #2e7d5b;
+  padding-bottom: 8px;
+  letter-spacing: 1px;
+  text-align: left;
+  margin-top: 0;
+}
+
+// Mensaje de error
+.error-msg {
+  color: #c00;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+// Acciones del formulario
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 24px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+}
+
+.btn-cancelar {
+  background: #f5f5f5;
+  color: #444;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 4px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: box-shadow 0.2s;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-cancelar:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.btn-guardar {
+  background: #15805c;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 4px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: box-shadow 0.2s;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-guardar:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  background: #006241;
+}

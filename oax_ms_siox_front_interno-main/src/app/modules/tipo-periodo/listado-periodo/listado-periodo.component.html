@@ -1,0 +1,52 @@
+<!-- Alerta genérica arriba a la derecha -->
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+<!-- Título -->
+<h2 class="titulo-cri">TIPO DE PERIODO</h2>
+
+
+
+
+
+  <!-- Botones alineados a la derecha, a la altura de la columna EDITAR -->
+  <div class="action-buttons" style="display: flex; flex-direction: column; align-items: flex-end;">
+    <div class="botones-secundarios" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+  <button class="icon-button" nz-tooltip nzTooltipTitle="Actualizar datos de la tabla" (click)="actualizarTabla()">
+    <i nz-icon nzType="redo" nzTheme="outline"></i>
+  </button>
+  <button class="icon-button" nz-tooltip nzTooltipTitle="Exportar registros a Excel" (click)="exportarExcel()" [disabled]="!data || data.length === 0">
+    <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+  </button>
+  <button class="icon-button" nz-tooltip nzTooltipTitle="Exportar registros a PDF" (click)="exportarPDF()" [disabled]="!data || data.length === 0">
+    <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+  </button>
+    </div>
+  </div>
+<br>
+
+<!-- Tabla -->
+<app-dynamic-table #tabla
+  [data]="data"
+  [columns]="colsConac"
+  [actionsHeader]="'EDITAR'"
+  [pageSize]="pageSize"
+  [pageIndex]="getPageIndexForTable()"
+  [frontPagination]="false"
+  [total]="total"
+  [scrollX]="'1600px'"
+  (sortChange)="onSortChange($event)"
+  (filterChange)="onFiltroServicioChange($event)"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+>
+</app-dynamic-table>
+

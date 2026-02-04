@@ -1,0 +1,23 @@
+<div class="menu-modulos-wrapper" (click)="$event.stopPropagation()">
+  <div class="menu-header">
+    <div class="header-left-group">
+      <i nz-icon nzType="appstore" class="icon-header"></i>
+      <span class="menu-title">MÓDULOS</span>
+    </div>
+    <button nz-button nzType="text" nzShape="circle" class="close-btn" (click)="cerrar()">
+      <i nz-icon nzType="close"></i>
+    </button>
+  </div>
+
+  <div class="menu-body">
+    <div class="modulo-grid">
+      <div
+        class="modulo-card"
+        *ngFor="let modulo of modulos"
+        (click)="seleccionarModulo(modulo)">
+        <i nz-icon nzType="unordered-list" class="icono-card"></i>
+        <span class="titulo-card">{{ modulo.titulo }}</span>
+      </div>
+    </div>
+  </div>
+</div>

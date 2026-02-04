@@ -1,0 +1,128 @@
+  
+  <div class="alert-top-right">
+      <app-generic-alert
+        *ngIf="showAlert"
+        class="alert-animate"
+        [message]="alertMessage"
+        [type]="alertType"
+        [icon]="alertIcon"
+        [description]="alertDescription"
+        [link]="alertDownloadLink"
+        (closed)="closeAlert()"
+      ></app-generic-alert>
+    </div>
+<div class="container-cri">
+   
+  <div class="header-cri" style="background: #f7f7f7; border-radius: 8px; padding: 1.5rem 2rem 1rem 2rem; margin-bottom: 2rem;">
+    <h2 class="titulo-cri" style="margin-bottom: 0.5rem;">{{ modoEdicion ? 'EDITAR DATOS DE LA CUENTA CONAC' : 'NUEVO REGISTRO: CATÁLOGO CONAC' }}</h2>
+    <div class="leyendas-cri" style="text-align: right; font-size: 1rem; color: #5f5c5caa; max-width: 100%; margin-top: 0.5rem;">
+      <div class="titulo-leyenda">
+        <span *ngIf="!modoEdicion">SELECCIONE LAS OPCIONES PARA CADA ELEMENTO.</span><br *ngIf="!modoEdicion">
+        <span *ngIf="!modoEdicion">SI LA OPCIÓN DESEADA NO ESTÁ DISPONIBLE, AGREGUE UN NUEVO ELEMENTO.</span>
+        <span *ngIf="modoEdicion">MODIFIQUE LOS DATOS DE LA CUENTA SEGÚN SEA NECESARIO.</span>
+      </div>
+    </div>
+  </div>
+  <div class="seccion-select">
+    <label>Ejercicio:</label>
+    <select [(ngModel)]="ejercicioSeleccionado" (change)="onEjercicioChange()" [disabled]="modoEdicion">
+      <option *ngFor="let e of ejerciciosDisponibles" [value]="e">{{e}}</option>
+    </select>
+  </div>
+  <div class="seccion-select">
+    <label>Género:</label>
+  <nz-select [(ngModel)]="generoSeleccionado" (ngModelChange)="onGeneroChange()" nzShowSearch nzAllowClear class="select-grande" [nzDisabled]="modoEdicion">
+      <nz-option *ngFor="let r of generos" [nzValue]="r" [nzLabel]="r.descripcion"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('genero')" *ngIf="!modoEdicion">+ Nuevo</button>
+  </div>
+   
+  <ng-container *ngIf="formularioVisible === 'genero'">
+     <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configGenero"
+      [formGroup]="formGenero"
+      (accion)="onAccionGenero($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+
+  <div class="seccion-select">
+    <label>Grupo:</label>
+    <nz-select [(ngModel)]="grupoSeleccionado" (ngModelChange)="onGrupoChange()" [disabled]="!generoSeleccionado || modoEdicion" nzShowSearch nzAllowClear class="select-grande">
+      <nz-option *ngFor="let t of grupos" [nzValue]="t" [nzLabel]="t.descripcion"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('grupo')" [disabled]="!generoSeleccionado" *ngIf="!modoEdicion">+ Nuevo</button>
+  </div>
+
+ 
+  <ng-container *ngIf="formularioVisible === 'grupo'">
+    <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configGrupo"
+      [formGroup]="formGrupo"
+      (accion)="onAccionGrupo($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+
+  <div class="seccion-select">
+    <label>Rubro:</label>
+    <nz-select [(ngModel)]="rubroSeleccionado" (ngModelChange)="onRubroChange()" [disabled]="!grupoSeleccionado || modoEdicion" nzShowSearch nzAllowClear class="select-grande">
+      <nz-option *ngFor="let c of rubros" [nzValue]="c" [nzLabel]="c.descripcion"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('rubro')" [disabled]="!grupoSeleccionado" *ngIf="!modoEdicion">+ Nuevo</button>
+  </div>
+  <ng-container *ngIf="formularioVisible === 'rubro'">
+      <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configRubro"
+      [formGroup]="formRubro"
+      (accion)="onAccionRubro($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+
+  <div class="seccion-select">
+    <label>Cuenta:</label>
+    <nz-select [(ngModel)]="cuentaSeleccionado" (ngModelChange)="onCuentaChange()"  [disabled]="!rubroSeleccionado || modoEdicion" nzShowSearch nzAllowClear class="select-grande">
+      <nz-option *ngFor="let c of cuenta" [nzValue]="c" [nzLabel]="c.descripcion"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('cuenta')" [disabled]="!rubroSeleccionado" *ngIf="!modoEdicion">+ Nuevo</button>
+  </div>
+  <ng-container *ngIf="formularioVisible === 'cuenta'">
+      <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configCuenta"
+      [formGroup]="formCuenta"
+      (accion)="onAccionCuenta($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+
+    <div class="seccion-select">
+    <label>SubCuenta:</label>
+    <nz-select [(ngModel)]="subcuentaSeleccionada" (ngModelChange)="onSubcuentaChange()"  [disabled]="!cuentaSeleccionado || modoEdicion" nzShowSearch nzAllowClear class="select-grande">
+      <nz-option *ngFor="let c of subcuenta" [nzValue]="c" [nzLabel]="c.descripcion"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('subcuenta')" [disabled]="!cuentaSeleccionado" *ngIf="!modoEdicion">+ Nuevo</button>
+  </div>
+  <ng-container *ngIf="formularioVisible === 'subcuenta'">
+      <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configSubcuentaActual"
+      [formGroup]="formSubCuenta"
+      (accion)="onAccionSubCuenta($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+
+    <ng-container *ngIf="formularioVisible === 'datosCuenta'">
+      <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configDatosCuentaActual"
+      [formGroup]="formDatosCuenta"
+      (accion)="onAccionDatosCuenta($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+  <div style="margin-top: 32px;">
+    <button nz-button nzType="default" (click)="regresar()" class="seccion-select regresar">
+      ← REGRESAR
+    </button>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+<div class="modal-genero">
+
+  <form nz-form [formGroup]="form" class="genero-form">
+    
+    <!-- Mensaje de error general -->
+    <div *ngIf="errorMessages['general']" class="error-message-general">
+      <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      {{ errorMessages['general'] }}
+    </div>
+<!-- Campo DESCRIPCIÓN TIPO -->
+<div class="form-field">
+  <label class="field-label">
+    DESCRIPCIÓN TIPO<span class="required">*</span>
+  </label>
+
+
+  <nz-select
+    formControlName="descripcionTipo"
+    nzPlaceHolder="SELECCIONA"
+    [nzLoading]="loadingTipos"
+    [nzOptions]="tiposAsentamiento"
+    [nzShowSearch]="true"
+    [nzServerSearch]="true"
+    (nzOnSearch)="onSearchTipo($event)"
+    (nzScrollToBottom)="onScrollToEndTipo()"
+    [class.input-error]="isFieldInvalid('descripcionTipo')"
+    style="width: 100%;"
+    nzAllowClear
+  >
+  </nz-select>
+
+  <div class="error-message" *ngIf="isFieldInvalid('descripcionTipo')">
+    <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+    {{ getErrorMessage('descripcionTipo') }}
+  </div>
+</div>
+
+    <!-- Campo CLAVE -->
+    <div class="form-field">
+  <label class="field-label">
+    CLAVE<span class="required">*</span>
+  </label>
+
+  <div style="margin-bottom: 0;">
+    <input
+      nz-input
+      formControlName="clave"
+      placeholder="INGRESE CLAVE"
+      maxlength="4"
+      (keydown)="validarClave($event)"
+      (input)="limitarCaracteres($event, 4)"
+      [class.input-error]="isFieldInvalid('clave')"
+      style="text-transform: uppercase; margin-bottom: 0;"
+    />
+
+    <!-- counter SIN margen -->
+    <div class="char-counter" style="margin-top: 2px; line-height: 1; padding: 0;">
+      {{ form.get('clave')?.value?.length || 0 }}/4
+    </div>
+
+    <!-- error pegado -->
+    <div
+      class="error-message"
+      *ngIf="isFieldInvalid('clave')"
+      style="margin-top: 2px;"
+    >
+      <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      {{ getErrorMessage('clave') }}
+    </div>
+  </div>
+</div>
+
+
+
+    <!-- Campo DESCRIPCIÓN -->
+    <div class="form-field">
+  <label class="field-label">
+    DESCRIPCIÓN<span class="required">*</span>
+  </label>
+
+  <div style="margin-bottom: 0;">
+    <input
+      nz-input
+      formControlName="descripcion"
+      placeholder="INGRESE DESCRIPCIÓN"
+      maxlength="100"
+      (input)="limitarCaracteres($event, 100)"
+      [class.input-error]="isFieldInvalid('descripcion')"
+      style="text-transform: uppercase; margin-bottom: 0;"
+    />
+
+    <div class="char-counter" style="margin-top: 2px; line-height: 1; padding: 0;">
+      {{ form.get('descripcion')?.value?.length || 0 }}/100
+    </div>
+
+    <div
+      class="error-message"
+      *ngIf="isFieldInvalid('descripcion')"
+      style="margin-top: 2px;"
+    >
+      <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      {{ getErrorMessage('descripcion') }}
+    </div>
+  </div>
+</div>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button 
+        nz-button 
+        nzType="default" 
+        (click)="cancelar()"
+        [disabled]="loading"
+      >
+        <i nz-icon nzType="close" class="icon-cancelar" style="margin-right: 4px;"></i>
+        CANCELAR
+      </button>
+      <button 
+        *ngIf="modo !== 'consultar'"
+        nz-button 
+        nzType="primary" 
+        (click)="guardar()"
+        [nzLoading]="loading"
+        style="background-color: #0d5a4a; border-color: #0d5a4a;"
+      >
+        <i nz-icon nzType="check" class="icon-guardar" style="margin-right: 4px;"></i>
+        GUARDAR
+      </button>
+    </div>
+  </form>
+</div>

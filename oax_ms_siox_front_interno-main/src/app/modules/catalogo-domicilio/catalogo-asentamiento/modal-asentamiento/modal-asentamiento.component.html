@@ -1,0 +1,90 @@
+<div class="modal-asentamiento">
+
+  <div class="modal-title">
+    <span>{{title}}</span>
+  </div>
+
+  <form nz-form [formGroup]="form" class="asentamiento-form">
+    
+    <!-- Mensaje de error general -->
+    <div *ngIf="errorMessages['general']" class="error-message-general">
+      <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      {{ errorMessages['general'] }}
+    </div>
+
+    <!-- Campo CLAVE -->
+    <app-form-field
+      label="CLAVE"
+      placeholder="INGRESE CLAVE"
+      formControlName="clave"
+      [required]="true"
+      [maxLength]="4"
+      [control]="form.get('clave')"
+      validationKey="clave"
+    ></app-form-field>
+
+    <!-- Campo DESCRIPCIÓN -->
+    <app-form-field
+      label="DESCRIPCIÓN"
+      placeholder="INGRESE DESCRIPCIÓN"
+      formControlName="descripcion"
+      [required]="true"
+      [maxLength]="100"
+      [control]="form.get('descripcion')"
+    ></app-form-field>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button 
+        nz-button
+        class="cancelar"
+        nzType="default" 
+        (click)="cancelar()"
+        [disabled]="loading || confirmCancel"
+      >
+        <i nz-icon nzType="close" class="icon-cancelar" style="margin-right: 4px;"></i>
+        CANCELAR
+      </button>
+      <button 
+        *ngIf="modo !== 'consultar'"
+        nz-button 
+        nzType="primary" 
+        (click)="guardar()"
+        [disabled]="confirmCancel"
+        [nzLoading]="loading"
+        style="background-color: #0d5a4a; border-color: #0d5a4a;"
+      >
+        <i nz-icon nzType="check" class="icon-guardar" style="margin-right: 4px;"></i>
+        GUARDAR
+      </button>
+    </div>
+
+    <div class="cancel-form-confirm" *ngIf="confirmCancel">
+      <div class="cancel-form-confirm-title">
+        <span>CANCELACIÓN</span>
+      </div>
+      <div class="cancel-form-confirm-content">
+        <span>SE PERDERÁN TODOS LOS DATOS INGRESADOS.</span>
+        <span>¿DESEA CANCELAR LA OPERACIÓN?</span>
+        <div class="buttons">
+      <button 
+        nz-button
+
+        (click)="confirmCancel = false"
+
+      >
+        NO
+      </button>
+      <button 
+        nz-button 
+
+        (click)="modal.close(null)"
+
+        style="background-color: #0d5a4a; border-color: #0d5a4a; color: #fff;"
+      >SI, CANCELAR
+      </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

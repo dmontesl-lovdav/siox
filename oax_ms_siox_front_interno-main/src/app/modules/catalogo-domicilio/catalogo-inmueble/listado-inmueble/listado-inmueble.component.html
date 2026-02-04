@@ -1,0 +1,134 @@
+<!-- ================= ALERTA (SE DEJA IGUAL) ================= -->
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+
+
+<app-confirmation-container></app-confirmation-container>
+<!-- ================= HEADER (MISMO PATRÓN QUE GÉNERO) ================= -->
+<div class="header-bar">
+  <h2 class="page-title">ADMINISTRADOR DE CATÁLOGO DE TIPO DE INMUEBLE</h2>
+
+  <div class="action-buttons">
+    <div class="button-row">
+      <button
+        nz-button
+        class="btn-nuevo"
+        (click)="nuevoRegistro()"
+        nz-tooltip
+        nzTooltipTitle="Nuevo registro del catálogo de Tipo de Inmueble"
+      >
+        <i nz-icon nzType="plus"></i>
+        NUEVO REGISTRO
+      </button>
+    </div>
+
+    <div class="botones-secundarios">
+      <button
+        class="icon-button"
+        (click)="actualizarTabla()"
+        nz-tooltip
+        nzTooltipTitle="Actualizar datos de la tabla"
+        title="Actualizar"
+      >
+        <i nz-icon nzType="redo" nzTheme="outline"></i>
+      </button>
+
+      <button
+        class="icon-button"
+        (click)="exportarExcel()"
+        nz-tooltip
+        nzTooltipTitle="Exportar registros a Excel"
+        title="Exportar Excel"
+      >
+        <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+      </button>
+
+      <button
+        class="icon-button"
+        (click)="exportarPdf()"
+        nz-tooltip
+        nzTooltipTitle="Exportar registros a PDF"
+        title="Exportar PDF"
+      >
+        <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<br />
+
+
+<!-- ✅ SOLO UNA VEZ -->
+<ng-template #accionesTpl let-row="row">
+  <!-- DESBLOQUEADO => Editar -->
+  <button
+    *ngIf="!isBloqueado(row)"
+    nz-tooltip
+    nzTooltipTitle="Editar"
+    nz-button
+    nzType="text"
+    (click)="$event.stopPropagation(); editar(row)"
+    title="Editar"
+  >
+    <i nz-icon nzType="edit" nzTheme="outline" style="color:#1890ff; margin-right:8px;"></i>
+  </button>
+
+  <!-- BLOQUEADO => Consultar -->
+  <button
+    *ngIf="isBloqueado(row)"
+    nz-tooltip
+    nzTooltipTitle="Consultar"
+    nz-button
+    nzType="text"
+    (click)="$event.stopPropagation(); consultar(row)"
+    title="Consultar"
+  >
+    <i nz-icon nzType="eye" nzTheme="outline" style="color:#52c41a; margin-right:8px;"></i>
+  </button>
+</ng-template>
+
+<ng-template #tplBloquear let-row="row">
+  <button
+    nz-button
+    nzType="text"
+    (click)="$event.stopPropagation(); toggleBloquear(row)"
+    [title]="isBloqueado(row) ? 'Desbloquear' : 'Bloquear'"
+    nz-tooltip
+    [nzTooltipTitle]="isBloqueado(row) ? 'Bloqueado' : 'Desbloqueado'"
+  >
+    <i
+      nz-icon
+      [nzType]="isBloqueado(row) ? 'lock' : 'unlock'"
+      nzTheme="fill"
+      [style.color]="isBloqueado(row) ? '#ff4d4f' : '#52c41a'"
+      [style.font-size.px]="18"
+    ></i>
+  </button>
+</ng-template>
+
+<!-- ✅ YA NO uses actionsTemplate/actionsHeader si tu tabla no lo soporta o te hace doble -->
+<app-dynamic-table
+  #tabla
+  [data]="data"
+  [columns]="colsInmueble"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex + 1"
+  [frontPagination]="false"
+  [total]="total"
+  [scrollX]="'1100px'"
+  (sortChange)="onSortChange($event)"
+  (filterChange)="onFiltroServicioChange($event)"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+>
+</app-dynamic-table>

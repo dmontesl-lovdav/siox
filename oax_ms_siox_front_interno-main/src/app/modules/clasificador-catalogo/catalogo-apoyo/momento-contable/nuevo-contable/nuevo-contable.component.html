@@ -1,0 +1,35 @@
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    [link]="alertDownloadLink"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+
+<div class="container-momento">
+  <div class="header-momento">
+    <h2 class="page-title">NUEVO REGISTRO DE MOMENTO CONTABLE</h2>
+    <div class="subtitle">
+      POR FAVOR, COMPLETE LOS SIGUIENTES CAMPOS PARA GENERAR UN REGISTRO NUEVO.
+    </div>
+  </div>
+
+  <div class="card-form">
+    <app-formulario-captura-generico
+      [config]="config"
+      [formGroup]="form"
+      (accion)="onAccion($event)"
+    ></app-formulario-captura-generico>
+  </div>
+
+  <div class="footer-actions">
+    <button nz-button nzType="default" (click)="regresar()" class="btn-regresar">
+      ← REGRESAR
+    </button>
+  </div>
+</div>

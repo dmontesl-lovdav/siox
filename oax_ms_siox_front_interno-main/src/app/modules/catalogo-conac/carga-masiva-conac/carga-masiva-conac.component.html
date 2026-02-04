@@ -1,0 +1,76 @@
+<div class="carga-masiva-cri-container">
+  <h2 class="titulo-cri">CARGA MASIVA: CATALOGO CONAC</h2>
+  <div class="descarga-actions">
+    <button nz-button class="btn-carga-masiva" (click)="descargarEjemplo()">
+      <i nz-icon nzType="cloud-download"></i>
+      DESCARGAR FORMATO DE EJEMPLO
+    </button>
+    <button nz-button class="btn-nuevo" (click)="descargarRellenar()">
+      <i nz-icon nzType="file-add"></i>
+      DESCARGAR FORMATO PARA RELLENAR
+    </button>
+  </div>
+  <div class="card-content">
+    <div class="alert-top-right">
+      <app-generic-alert
+        *ngIf="showAlert"
+        class="alert-animate"
+        [message]="alertMessage"
+        [type]="alertType"
+        [icon]="alertIcon"
+        [description]="alertDescription"
+        [link]="alertDownloadLink"
+        (closed)="closeAlert()"
+      ></app-generic-alert>
+    </div>
+    <div class="info-banner">
+      ASEGÚRESE DE QUE SU ARCHIVO ESTÉ BIEN ESTRUCTURADO DESCARGANDO LOS FORMATOS DISPONIBLES.<br />
+      SI HAY ERRORES, SE DESCARGARÁ AUTOMÁTICAMENTE UN ARCHIVO .TXT CON LOS DETALLES.
+    </div>
+    <div class="card-info">
+      SE PODRÁ PROCESAR LA INFORMACIÓN CORRESPONDIENTE AL EJERCICIO FISCAL VIGENTE Y AL SIGUIENTE.
+    </div>
+    <div class="ejercicio-row">
+      <label for="ejercicioFiscal" class="label-ejercicio">EJERCICIO FISCAL:</label>
+      <nz-select id="ejercicioFiscal" class="select-ejercicio" [(ngModel)]="selectedEjercicio" [nzOptions]="ejercicios">
+      </nz-select>
+    </div>
+  <!-- Eliminados inputs duplicados. El botón de carga se puede agregar en la sección de acciones o junto al select y file input existentes. -->
+    <nz-card class="card-carga-archivo" 
+             (drop)="onDrop($event)" 
+             (dragover)="onDragOver($event)" 
+             (dragleave)="onDragLeave($event)"
+             [class.dragging]="isDragging">
+      <div class="form-row fila-examinar">
+        <label class="btn-examinar" for="fileInput">EXAMINAR
+          <input id="fileInput" type="file" accept=".xlsx" style="display:none" (change)="onFileSelected($event)" />
+        </label>
+        <span *ngIf="!archivoCargado" class="archivo-indicacion">
+          COLOQUE AQUÍ EL ARCHIVO PARA CARGARLO O ARRÁSTRELO AQUÍ
+        </span>
+        <span *ngIf="archivoCargado" class="archivo-hecho">
+          <i nz-icon nzType="check" nzTheme="outline"></i> HECHO
+        </span>
+      </div>
+      <div *ngIf="archivoCargado" class="archivo-cargado-row">
+        <div class="archivo-icon">
+          <i nz-icon nzType="file-excel" nzTheme="outline" style="font-size:32px;"></i>
+        </div>
+        <div class="archivo-info">
+          <div class="archivo-nombre">{{ archivoCargado.nombre }}</div>
+          <div class="archivo-validado">ARCHIVO VALIDADO DE FORMA CORRECTA</div>
+        </div>
+        <div class="archivo-actions">
+          <i nz-icon nzType="download" nzTheme="outline" class="archivo-action" (click)="descargarArchivo()"></i>
+          <i nz-icon nzType="delete" nzTheme="outline" class="archivo-action" (click)="eliminarArchivo()"></i>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+    <div class="footer-actions">
+      <button nz-button class="btn-regresar" (click)="regresar()">REGRESAR</button>
+      <button nz-button class="btn-cargar" (click)="cargarArchivo()">CARGAR</button>
+    </div>
+</div>
+
+

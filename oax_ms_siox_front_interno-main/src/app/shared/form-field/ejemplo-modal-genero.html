@@ -1,0 +1,72 @@
+<!-- ============================================ -->
+<!-- EJEMPLO: Modal Genero con app-form-field -->
+<!-- ============================================ -->
+
+<div class="modal-genero">
+  <form nz-form [formGroup]="form" class="genero-form">
+    
+    <!-- Mensaje de error general (si lo necesitas) -->
+    <div *ngIf="errorMessages['general']" class="error-message-general">
+      <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      {{ errorMessages['general'] }}
+    </div>
+
+    <!-- Campo CLAVE con el nuevo componente -->
+    <app-form-field
+      label="CLAVE"
+      placeholder="INGRESE CLAVE"
+      [control]="form.get('clave')"
+      [required]="true"
+      [maxLength]="4"
+      validationKey="clave"
+      [customErrors]="{
+        claveExiste: 'LA CLAVE YA EXISTE.',
+        pattern: 'CARACTERES PERMITIDOS (A-Z).'
+      }"
+    ></app-form-field>
+
+    <!-- Campo DESCRIPCIÓN con el nuevo componente -->
+    <app-form-field
+      label="DESCRIPCIÓN"
+      placeholder="INGRESE DESCRIPCIÓN"
+      [control]="form.get('descripcion')"
+      [required]="true"
+      [maxLength]="100"
+    ></app-form-field>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button 
+        nz-button 
+        nzType="default" 
+        (click)="cancelar()"
+        [disabled]="loading"
+      >
+        <i nz-icon nzType="close" class="icon-cancelar" style="margin-right: 4px;"></i>
+        CANCELAR
+      </button>
+      <button 
+        *ngIf="modo !== 'consultar'"
+        nz-button 
+        nzType="primary" 
+        (click)="guardar()"
+        [nzLoading]="loading"
+        style="background-color: #0d5a4a; border-color: #0d5a4a;"
+      >
+        <i nz-icon nzType="check" class="icon-guardar" style="margin-right: 4px;"></i>
+        GUARDAR
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- ============================================ -->
+<!-- RESULTADO: -->
+<!-- - De ~80 líneas a ~40 líneas -->
+<!-- - Sin métodos limitarCaracteres(), isFieldInvalid(), getErrorMessage() -->
+<!-- - Contador automático de caracteres -->
+<!-- - Múltiples errores soportados -->
+<!-- - Mensaje informativo al alcanzar límite -->
+<!-- - Botón X para limpiar automático -->
+<!-- - Validación de clave (A-Z) automática -->
+<!-- ============================================ -->

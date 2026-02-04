@@ -1,0 +1,225 @@
+<div class="reset-2fa-container">
+  <div class="reset-2fa-wrapper">
+    <nz-card class="reset-2fa-card" [nzBordered]="true">
+      
+      <!-- Header -->
+      <div class="reset-2fa-header">
+        <button nz-button nzType="link" (click)="goBack()" class="back-button">
+          <i nz-icon nzType="arrow-left"></i> Volver al login
+        </button>
+        <h1>
+          <i nz-icon nzType="safety" nzTheme="outline"></i>
+          Reconfigurar Autenticación 2FA
+        </h1>
+        <p class="subtitle">¿Perdiste tu dispositivo? Configura 2FA nuevamente</p>
+      </div>
+
+      <!-- Stepper -->
+      <nz-steps [nzCurrent]="currentStep" class="steps-container">
+        <nz-step nzTitle="Credenciales" nzDescription="Verifica tu identidad"></nz-step>
+        <nz-step nzTitle="Nuevo QR" nzDescription="Escanea el código"></nz-step>
+        <nz-step nzTitle="Validar" nzDescription="Confirma el código"></nz-step>
+      </nz-steps>
+
+      <nz-divider></nz-divider>
+
+      <!-- Mensajes -->
+      <nz-alert
+        *ngIf="errorMessage"
+        nzType="error"
+        [nzMessage]="errorMessage"
+        nzShowIcon
+        nzCloseable
+        (nzOnClose)="errorMessage = ''"
+        class="alert-message"
+      ></nz-alert>
+
+      <nz-alert
+        *ngIf="successMessage"
+        nzType="success"
+        [nzMessage]="successMessage"
+        nzShowIcon
+        nzCloseable
+        (nzOnClose)="successMessage = ''"
+        class="alert-message"
+      ></nz-alert>
+
+      <!-- PASO 1: Credenciales -->
+      <div *ngIf="currentStep === 0" class="step-content">
+        <div class="step-info">
+          <i nz-icon nzType="info-circle" nzTheme="outline"></i>
+          <p>Para reconfigurar tu autenticación de dos factores, primero necesitamos verificar tu identidad.</p>
+        </div>
+
+        <form nz-form [formGroup]="credentialsForm" (ngSubmit)="onSubmitCredentials()" class="credentials-form">
+          <!-- Campo Correo -->
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true" nzFor="correo">Correo Electrónico</nz-form-label>
+            <nz-form-control [nzErrorTip]="correoErrorTpl">
+              <nz-input-group nzPrefixIcon="mail">
+                <input
+                  nz-input
+                  type="email"
+                  id="correo"
+                  formControlName="correo"
+                  placeholder="usuario@ejemplo.com"
+                  [disabled]="loading"
+                />
+              </nz-input-group>
+              <ng-template #correoErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Por favor ingrese su correo electrónico
+                </ng-container>
+                <ng-container *ngIf="control.hasError('email')">
+                  Por favor ingrese un correo válido
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Campo Contraseña -->
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true" nzFor="password">Contraseña</nz-form-label>
+            <nz-form-control [nzErrorTip]="passwordErrorTpl">
+              <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="lock">
+                <input
+                  nz-input
+                  [type]="showPassword ? 'text' : 'password'"
+                  id="password"
+                  formControlName="password"
+                  placeholder="Ingrese su contraseña"
+                  [disabled]="loading"
+                />
+              </nz-input-group>
+              <ng-template #suffixTemplate>
+                <span
+                  nz-icon
+                  [nzType]="showPassword ? 'eye-invisible' : 'eye'"
+                  (click)="togglePasswordVisibility()"
+                  class="password-toggle"
+                ></span>
+              </ng-template>
+              <ng-template #passwordErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Por favor ingrese su contraseña
+                </ng-container>
+                <ng-container *ngIf="control.hasError('minlength')">
+                  La contraseña debe tener al menos 6 caracteres
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Botón de submit -->
+          <nz-form-item class="form-button">
+            <button
+              nz-button
+              nzType="primary"
+              nzBlock
+              [nzLoading]="loading"
+              [disabled]="loading"
+              type="submit"
+            >
+              <span *ngIf="!loading">Verificar y Generar Nuevo QR</span>
+              <span *ngIf="loading">Verificando...</span>
+            </button>
+          </nz-form-item>
+        </form>
+      </div>
+
+      <!-- PASO 2: Mostrar QR -->
+      <div *ngIf="currentStep === 1 && twoFactorSetup" class="step-content">
+        <div class="qr-section">
+          <h3>Escanea este código QR con tu aplicación de autenticación</h3>
+          <p class="instruction">Usa Google Authenticator, Microsoft Authenticator o cualquier aplicación compatible con TOTP</p>
+          
+          <div class="qr-container">
+            <img [src]="twoFactorSetup.qrCodeUrl" alt="Código QR 2FA" class="qr-image" />
+          </div>
+
+          <nz-divider nzText="O ingresa el código manualmente"></nz-divider>
+
+          <div class="manual-code-section">
+            <p class="label">Código secreto:</p>
+            <div class="code-display">
+              <code class="secret-code">{{ twoFactorSetup.manualEntryKey || twoFactorSetup.secret }}</code>
+              <button 
+                nz-button 
+                nzType="default" 
+                nzSize="small"
+                (click)="copySecretKey()"
+                title="Copiar código"
+              >
+                <i nz-icon nzType="copy"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="navigation-buttons">
+            <button nz-button nzType="default" (click)="prevStep()">
+              <i nz-icon nzType="left"></i> Anterior
+            </button>
+            <button nz-button nzType="primary" (click)="nextStep()">
+              Siguiente <i nz-icon nzType="right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 3: Validar código -->
+      <div *ngIf="currentStep === 2" class="step-content">
+        <div class="validation-section">
+          <h3>Ingresa el código de 6 dígitos</h3>
+          <p class="instruction">Abre tu aplicación de autenticación e ingresa el código que aparece</p>
+
+          <form nz-form [formGroup]="validateForm" (ngSubmit)="onSubmitValidation()" class="validation-form">
+            <nz-form-item>
+              <nz-form-label [nzRequired]="true" nzFor="code">Código de Verificación</nz-form-label>
+              <nz-form-control [nzErrorTip]="codeErrorTpl">
+                <input
+                  nz-input
+                  type="text"
+                  id="code"
+                  formControlName="code"
+                  placeholder="000000"
+                  maxlength="6"
+                  [disabled]="loading"
+                  (input)="onCodeInput($event)"
+                  class="code-input"
+                />
+                <ng-template #codeErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">
+                    Por favor ingrese el código de 6 dígitos
+                  </ng-container>
+                  <ng-container *ngIf="control.hasError('pattern')">
+                    El código debe contener solo números
+                  </ng-container>
+                  <ng-container *ngIf="control.hasError('minlength') || control.hasError('maxlength')">
+                    El código debe tener exactamente 6 dígitos
+                  </ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <div class="navigation-buttons">
+              <button nz-button nzType="default" (click)="prevStep()" type="button">
+                <i nz-icon nzType="left"></i> Ver QR nuevamente
+              </button>
+              <button
+                nz-button
+                nzType="primary"
+                [nzLoading]="loading"
+                [disabled]="loading"
+                type="submit"
+              >
+                <span *ngIf="!loading">Completar Reconfiguración</span>
+                <span *ngIf="loading">Validando...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </nz-card>
+  </div>
+</div>

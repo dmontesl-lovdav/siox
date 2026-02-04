@@ -1,0 +1,10 @@
+<nz-alert
+  [nzType]="type"
+  [nzMessage]="message"
+  [nzDescription]="description"
+  [nzShowIcon]="true"
+  [nzIconType]="icon"
+  [nzCloseable]="true"
+  (nzOnClose)="onClose()"
+  [ngClass]="'generic-alert ' + type + ' alert-animate'"
+/>

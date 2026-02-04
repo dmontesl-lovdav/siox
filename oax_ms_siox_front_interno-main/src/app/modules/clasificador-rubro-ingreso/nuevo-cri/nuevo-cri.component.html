@@ -1,0 +1,102 @@
+  
+  <div class="alert-top-right">
+      <app-generic-alert
+        *ngIf="showAlert"
+        class="alert-animate"
+        [message]="alertMessage"
+        [type]="alertType"
+        [icon]="alertIcon"
+        [description]="alertDescription"
+        [link]="alertDownloadLink"
+        (closed)="closeAlert()"
+      ></app-generic-alert>
+    </div>
+<div class="container-cri">
+   
+  <div class="header-cri" style="background: #f7f7f7; border-radius: 8px; padding: 1.5rem 2rem 1rem 2rem; margin-bottom: 2rem;">
+    <h2 class="titulo-cri" style="margin-bottom: 0.5rem;">NUEVO REGISTRO: CLASIFICADOR POR RUBRO DE INGRESOS</h2>
+    <div class="leyendas-cri" style="text-align: right; font-size: 1rem; color: #5f5c5caa; max-width: 100%; margin-top: 0.5rem;">
+      <div class="titulo-leyenda">
+        <span>SELECCIONE LAS OPCIONES PARA CADA ELEMENTO.</span><br>
+        <span>SI LA OPCIÓN DESEADA NO ESTÁ DISPONIBLE, AGREGUE UN NUEVO ELEMENTO.</span>
+      </div>
+    </div>
+  </div>
+  <div class="seccion-select">
+    <label>Ejercicio Fiscal:</label>
+    <select [(ngModel)]="ejercicioSeleccionado" (change)="onEjercicioChange()">
+      <option *ngFor="let e of ejerciciosDisponibles" [value]="e">{{e}}</option>
+    </select>
+  </div>
+  <div class="seccion-select">
+    <label>Rubro:</label>
+  <nz-select [(ngModel)]="rubroSeleccionado" (ngModelChange)="onRubroChange()" nzShowSearch nzAllowClear class="select-grande">
+      <nz-option *ngFor="let r of rubros" [nzValue]="r" [nzLabel]="r.nombre"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('rubro')">+ Nuevo</button>
+  </div>
+   
+  <ng-container *ngIf="formularioVisible === 'rubro'">
+     <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configRubro"
+      [formGroup]="formRubro"
+      (accion)="onAccionRubro($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+
+  <div class="seccion-select">
+    <label>Tipo:</label>
+    <nz-select [(ngModel)]="tipoSeleccionado" (ngModelChange)="onTipoChange()" [disabled]="!rubroSeleccionado" nzShowSearch nzAllowClear class="select-grande">
+      <nz-option *ngFor="let t of tipos" [nzValue]="t" [nzLabel]="t.nombre"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('tipo')" [disabled]="!rubroSeleccionado">+ Nuevo</button>
+  </div>
+
+ 
+  <ng-container *ngIf="formularioVisible === 'tipo'">
+    <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configTipo"
+      [formGroup]="formTipo"
+      (accion)="onAccionTipo($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+
+  <div class="seccion-select">
+    <label>Clase:</label>
+    <nz-select [(ngModel)]="claseSeleccionada" (ngModelChange)="onClaseChange()" [disabled]="!tipoSeleccionado" nzShowSearch nzAllowClear class="select-grande">
+      <nz-option *ngFor="let c of clases" [nzValue]="c" [nzLabel]="c.nombre"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('clase')" [disabled]="!tipoSeleccionado">+ Nuevo</button>
+  </div>
+  <ng-container *ngIf="formularioVisible === 'clase'">
+      <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configClase"
+      [formGroup]="formClase"
+      (accion)="onAccionClase($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+
+  <div class="seccion-select">
+    <label>Concepto:</label>
+    <nz-select [(ngModel)]="conceptoSeleccionado" (ngModelChange)="onConceptoChange()" [disabled]="!claseSeleccionada" nzShowSearch nzAllowClear class="select-grande">
+      <nz-option *ngFor="let c of conceptos" [nzValue]="c" [nzLabel]="c.nombre"></nz-option>
+    </nz-select>
+    <button (click)="mostrarFormulario('concepto')" [disabled]="!claseSeleccionada">+ Nuevo</button>
+  </div>
+  <ng-container *ngIf="formularioVisible === 'concepto'">
+      <div class="seccion-select">
+    <app-formulario-captura-generico
+      [config]="configConcepto"
+      [formGroup]="formConcepto"
+      (accion)="onAccionConcepto($event)"></app-formulario-captura-generico>
+      </div>
+  </ng-container>
+  <div style="margin-top: 32px;">
+    <button nz-button nzType="default" (click)="regresar()" class="seccion-select regresar">
+      ← REGRESAR
+    </button>
+  </div>
+</div>

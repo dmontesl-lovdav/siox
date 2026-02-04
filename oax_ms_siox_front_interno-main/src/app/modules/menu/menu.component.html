@@ -1,0 +1,102 @@
+<div class="container">
+<nz-layout class="main-layout">
+<nz-header class="top-header">
+
+  <!-- MOBILE HEADER (visible en < 768px) -->
+  <div class="header-left-mobile">
+    <!-- Fila superior: logo y usuario -->
+    <div class="row-superior">
+      <div class="left-icons">
+        <i nz-icon nzType="menu" class="menu-icon" (click)="mostrarMenuModulos()"></i>
+        <img src="../../../assets/logo2.svg" alt="Logo Oaxaca" class="logo" />
+      </div>
+      <div class="user-block">
+        <i nz-icon nzType="user" class="user-icon"></i>
+        <span class="username">{{ nombreUsuario }}</span>
+        <i nz-icon nzType="logout" class="logout-icon" (click)="logout()" title="Cerrar sesión" style="cursor: pointer;"></i>
+      </div>
+    </div>
+
+    <!-- Fila inferior: título -->
+    <div class="row-inferior">
+      <span class="title-mobile">ADMINISTRADOR CONTABLE DEL INGRESO</span>
+    </div>
+  </div>
+
+  <!-- DESKTOP HEADER (visible en ≥ 768px) -->
+  <div class="header-left-desktop">
+    <i nz-icon nzType="menu" class="menu-icon" (click)="mostrarMenuModulos()"></i>
+    <img src="../../../assets/logo2.svg" alt="Logo Oaxaca" class="logo" />
+    <span class="title-desktop">ADMINISTRADOR CONTABLE DEL INGRESO</span>
+  </div>
+
+  <div class="header-right-desktop">
+    <i nz-icon nzType="user" class="user-icon"></i>
+    <span class="username">{{ nombreUsuario }}</span>
+    <i nz-icon nzType="logout" class="logout-icon" (click)="logout()" title="Cerrar sesión" style="cursor: pointer;"></i>
+  </div>
+
+</nz-header>
+
+<!-- Menú de módulos -->
+<!-- Contenedor envolvente del área interactiva del menú -->
+<div #menuWrapperRef>
+  <div class="modulos-overlay" *ngIf="menuAbierto && !submenuActivo" @rollFromLeft>
+    <app-menu-modulos
+      (cerrarMenu)="cerrarMenuModulos()"
+      (abrirSubmenu)="mostrarSubmenu($event)">
+    </app-menu-modulos>
+  </div>
+
+  <app-submenu-sidebar
+    *ngIf="submenuActivo"
+    [@slideSidebar]
+    [modulo]="moduloSeleccionado"
+    (cerrar)="cerrarSubmenu()"
+    (breadcrumbGenerado)="actualizarBreadcrumb($event)"
+    (navegacionTerminada)="cerrarSubmenuAutomatico()"
+  ></app-submenu-sidebar>
+</div>
+
+
+  <!-- CINTA GRÁFICA -->
+  <div class="cinta-grafica"></div>
+
+<!-- BREADCRUMB DINÁMICO -->
+<div class="breadcrumb-bar" *ngIf="breadcrumbRuta.length > 0">
+  <i nz-icon nzType="home" nzTheme="outline"></i>
+  <ng-container *ngFor="let item of breadcrumbRuta; let last = last">
+    <ng-container *ngIf="!last">
+      <span>{{ item.nombre }}</span> ›
+    </ng-container>
+    <strong *ngIf="last">{{ item.nombre }}</strong>
+  </ng-container>
+</div>
+
+  <!-- CONTENIDO -->
+  <nz-content class="content">
+    <router-outlet></router-outlet>
+  </nz-content>
+
+  <!-- FOOTER -->
+  <nz-footer class="footer-oaxaca">
+    <div class="footer-container footer-wrapper">
+      <img src="../../../assets/logo-oaxaca.svg" alt="Oaxaca Logo" class="footer-logo" />
+      <div class="footer-text">
+        <div class="footer-title">
+          <strong>
+            GOBIERNO DE OAXACA 2025 © SECRETARÍA DE FINANZAS WWW.OAXACA.GOB.MX
+          </strong>
+        </div>
+        <div class="footer-info">
+          Centro Administrativo del Poder Ejecutivo y Judicial "General Porfirio Díaz, Soldado de la Patria"
+          Edificio "D" Saúl Martínez<br />
+          Avenida Gerardo Pandal Graff #1, Reyes Mantecón, San Bartolo Coyotepec, Centro, Oaxaca.
+          C.P. 71257 Conmutador (951) 50 1 69 00
+        </div>
+      </div>
+    </div>
+    <div class="footer-banda"></div>
+  </nz-footer>
+</nz-layout>
+</div>

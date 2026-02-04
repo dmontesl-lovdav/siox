@@ -1,0 +1,80 @@
+<!-- Alerta genérica arriba a la derecha -->
+<div class="alert-top-right">
+  <app-generic-alert *ngIf="showAlert" class="alert-animate" [message]="alertMessage" [type]="alertType"
+    [icon]="alertIcon" [description]="alertDescription" (closed)="closeAlert()"></app-generic-alert>
+</div>
+
+<!-- Contenedor de confirmaciones -->
+<app-confirmation-container></app-confirmation-container>
+
+<div class="header-bar">
+
+  <div class="header-title">
+    <h2 class="page-title">
+      ADMINISTRADOR DE CATÁLOGO DE TIPO DE SECTOR GUBERNAMENTAL
+    </h2>
+  </div>
+
+  <div class="action-buttons" style="margin-left:auto; align-items:flex-end;">
+    <div class="button-row">
+      <button
+        nz-button
+        class="btn-nuevo"
+        (click)="nuevoGubernamental()"
+        nz-tooltip
+        nzTooltipTitle="Nuevo registro del catálogo de Tipo de Sector Gubernamental"
+      >
+        <i nz-icon nzType="plus" nzTheme="outline"></i>
+        NUEVO REGISTRO
+      </button>
+    </div>
+
+    <div class="botones-secundarios">
+      <button class="icon-button icon-table-buttons" (click)="actualizarTabla()" nz-tooltip nzTooltipTitle="Actualizar datos de la tabla">
+        <i nz-icon nzType="redo" nzTheme="outline"></i>
+      </button>
+
+      <button class="icon-button icon-table-buttons" (click)="exportarExcel()" nz-tooltip nzTooltipTitle="Exportar Registros a Excel">
+        <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+      </button>
+
+      <button class="icon-button icon-table-buttons" (click)="exportarPdf()" nz-tooltip nzTooltipTitle="Exportar Registros a PDF">
+        <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+
+</div>
+<br />
+
+<!-- Tabla -->
+<app-dynamic-table 
+  #tabla 
+  [data]="data" 
+  [columns]="colsGubernamental" 
+  [pageSize]="pageSize" 
+  [pageIndex]="getPageIndexForTable()"
+  [frontPagination]="false" 
+  [total]="total" 
+  [scrollX]="'1200px'" 
+  [hasFilters]="hasFiltersApplied"
+  (sortChange)="onSortChange($event)"
+  (filterChange)="onFiltroServicioChange($event)" 
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)">
+</app-dynamic-table>
+
+<!-- Template para acciones (editar) -->
+<ng-template #actionsTemplate let-row="row">
+  <button 
+    nz-button 
+    nzType="text" 
+    (click)="editarGubernamental(row)" 
+    title="Editar"
+    nz-tooltip 
+    nzTooltipTitle="Editar"
+    class="action-btn-edit"
+  >
+    <i nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px"></i>
+  </button>
+</ng-template>

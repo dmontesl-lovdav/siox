@@ -1,0 +1,197 @@
+<div class="setup-2fa-container">
+  <div class="setup-card-wrapper">
+    <nz-card class="setup-card" [nzBordered]="true">
+      <!-- Header -->
+      <div class="setup-header">
+        <div class="icon-container">
+          <i nz-icon nzType="security-scan" nzTheme="outline" class="setup-icon"></i>
+        </div>
+        <h1>Configurar Autenticación 2FA</h1>
+        <p class="subtitle">Protege tu cuenta con verificación en dos pasos</p>
+        <p class="user-email">{{ correo }}</p>
+      </div>
+
+      <!-- Steps -->
+      <nz-steps [nzCurrent]="currentStep" class="setup-steps">
+        <nz-step nzTitle="Instalar App"></nz-step>
+        <nz-step nzTitle="Escanear QR"></nz-step>
+        <nz-step nzTitle="Validar"></nz-step>
+      </nz-steps>
+
+      <nz-divider></nz-divider>
+
+      <!-- Mensajes -->
+      <nz-alert
+        *ngIf="errorMessage"
+        nzType="error"
+        [nzMessage]="errorMessage"
+        nzShowIcon
+        nzCloseable
+        (nzOnClose)="errorMessage = ''"
+        class="alert-message"
+      ></nz-alert>
+
+      <nz-alert
+        *ngIf="successMessage"
+        nzType="success"
+        [nzMessage]="successMessage"
+        nzShowIcon
+        class="alert-message"
+      ></nz-alert>
+
+      <!-- Contenido según el paso -->
+      <div class="setup-content">
+        <!-- Paso 1: Instalar aplicación -->
+        <div *ngIf="currentStep === 0" class="step-content">
+          <h3>Paso 1: Instalar una aplicación autenticadora</h3>
+          <p>Descarga e instala una de las siguientes aplicaciones en tu dispositivo móvil:</p>
+          
+          <div class="app-list">
+            <div class="app-item">
+              <i nz-icon nzType="android" nzTheme="outline"></i>
+              <span><strong>Google Authenticator</strong></span>
+            </div>
+            <div class="app-item">
+              <i nz-icon nzType="apple" nzTheme="outline"></i>
+              <span><strong>Microsoft Authenticator</strong></span>
+            </div>
+            <div class="app-item">
+              <i nz-icon nzType="mobile" nzTheme="outline"></i>
+              <span><strong>Authy</strong></span>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button nz-button nzType="default" (click)="goBack()">
+              Cancelar
+            </button>
+            <button nz-button nzType="primary" (click)="nextStep()">
+              Siguiente
+              <i nz-icon nzType="arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 2: Escanear QR -->
+        <div *ngIf="currentStep === 1" class="step-content">
+          <h3>Paso 2: Escanear código QR</h3>
+          <p>Abre tu aplicación autenticadora y escanea el siguiente código QR:</p>
+
+          <div class="qr-container" *ngIf="twoFactorSetup">
+            <!-- Mostrar imagen QR desde base64 -->
+            <img 
+              [src]="twoFactorSetup.qrCodeUrl" 
+              alt="Código QR para autenticación de dos factores"
+              class="qr-image"
+            />
+          </div>
+
+          <nz-divider nzText="O ingresa manualmente"></nz-divider>
+
+          <div class="manual-key" *ngIf="twoFactorSetup">
+            <div class="key-info">
+              <span class="label">Clave secreta:</span>
+              <code class="secret-key">{{ twoFactorSetup.manualEntryKey || twoFactorSetup.secret }}</code>
+              <button
+                nz-button
+                nzType="link"
+                nzSize="small"
+                (click)="copySecretKey()"
+                title="Copiar al portapapeles"
+              >
+                <i nz-icon nzType="copy"></i>
+              </button>
+            </div>
+            <div class="key-details" *ngIf="twoFactorSetup.issuer || twoFactorSetup.accountName">
+              <p *ngIf="twoFactorSetup.issuer"><strong>Emisor:</strong> {{ twoFactorSetup.issuer }}</p>
+              <p *ngIf="twoFactorSetup.accountName"><strong>Cuenta:</strong> {{ twoFactorSetup.accountName }}</p>
+            </div>
+            <div class="key-message" *ngIf="twoFactorSetup.mensaje">
+              <p><i nz-icon nzType="info-circle"></i> {{ twoFactorSetup.mensaje }}</p>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button nz-button nzType="default" (click)="prevStep()">
+              <i nz-icon nzType="arrow-left"></i>
+              Anterior
+            </button>
+            <button nz-button nzType="primary" (click)="nextStep()">
+              Siguiente
+              <i nz-icon nzType="arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 3: Validar -->
+        <div *ngIf="currentStep === 2" class="step-content">
+          <h3>Paso 3: Validar configuración</h3>
+          <p>Ingresa el código de 6 dígitos que aparece en tu aplicación autenticadora:</p>
+
+          <form nz-form [formGroup]="validateForm" (ngSubmit)="onSubmit()" class="validate-form">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="codeErrorTpl">
+                <nz-input-group nzPrefixIcon="number" nzSize="large">
+                  <input
+                    nz-input
+                    type="text"
+                    id="code"
+                    formControlName="code"
+                    placeholder="000000"
+                    maxlength="6"
+                    [disabled]="loading"
+                    (input)="onCodeInput($event)"
+                    class="code-input"
+                    autocomplete="off"
+                  />
+                </nz-input-group>
+                <ng-template #codeErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">
+                    Por favor ingrese el código
+                  </ng-container>
+                  <ng-container *ngIf="control.hasError('pattern') || control.hasError('minlength')">
+                    El código debe ser de 6 dígitos
+                  </ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+
+            <div class="info-box">
+              <i nz-icon nzType="info-circle" nzTheme="outline"></i>
+              <p>
+                Los códigos se renuevan cada 30 segundos. 
+                Si el código no funciona, espera a que se genere uno nuevo.
+              </p>
+            </div>
+
+            <div class="step-actions">
+              <button
+                nz-button
+                nzType="default"
+                (click)="prevStep()"
+                [disabled]="loading"
+                type="button"
+              >
+                <i nz-icon nzType="arrow-left"></i>
+                Anterior
+              </button>
+              <button
+                nz-button
+                nzType="primary"
+                [nzLoading]="loading"
+                [disabled]="loading || !validateForm.valid"
+                type="submit"
+              >
+                <span *ngIf="!loading">
+                  <i nz-icon nzType="check"></i>
+                  Completar Configuración
+                </span>
+                <span *ngIf="loading">Validando...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</div>

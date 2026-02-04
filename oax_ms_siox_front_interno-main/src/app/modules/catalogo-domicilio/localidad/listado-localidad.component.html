@@ -1,0 +1,10 @@
+<!-- Template para columna de selección -->
+<ng-template #seleccionTemplate let-row="row">
+  <label>
+    <input type="checkbox"
+      [checked]="row._checked"
+      (change)="onSelectRow(row, $event.target.checked)"
+      [disabled]="selectedEstatus !== null && (row.estatus === true || row.estatus === 'true') !== selectedEstatus"
+    />
+  </label>
+</ng-template>

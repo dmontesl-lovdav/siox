@@ -1,0 +1,125 @@
+<!-- Alerta genérica arriba a la derecha -->
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+
+<!-- Contenedor de confirmaciones -->
+<app-confirmation-container></app-confirmation-container>
+
+<!-- Título y botón Nueva Estructura -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+  <h2 class="titulo-cri">ESTRUCTURA DE CUENTAS</h2>
+  <button nz-button nzType="primary" style="background-color: #0d5a4a; border-color: #0d5a4a;" (click)="nuevaEstructura()" nz-tooltip nzTooltipTitle="Nuevo Registro">
+    <i nz-icon nzType="plus"></i>
+    NUEVA ESTRUCTURA
+  </button>
+</div>
+
+<!-- Botones alineados a la derecha -->
+<div class="action-buttons" style="display: flex; flex-direction: column; align-items: flex-end;">
+  <div class="botones-secundarios" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+    <button class="icon-button" nz-tooltip nzTooltipTitle="Actualizar datos de la tabla" (click)="actualizarTabla()">
+      <i nz-icon nzType="redo" nzTheme="outline"></i>
+    </button>
+    <button class="icon-button" nz-tooltip nzTooltipTitle="Exportar Registros Excel" (click)="exportarExcel()">
+      <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+    </button>
+    <button class="icon-button" nz-tooltip nzTooltipTitle="Exportar Registros PDF">
+      <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+    </button>
+  </div>
+</div>
+<br>
+
+<!-- Tabla -->
+<app-dynamic-table #tabla
+  [data]="data"
+  [columns]="colsEstructura"
+  [actionsHeader]="'ACCIONES'"
+  [actionsTemplate]="actionsTemplate"
+  [actionsWidth]="'80px'"
+  [pageSize]="pageSize"
+  [pageIndex]="getPageIndexForTable()"
+  [frontPagination]="false"
+  [total]="total"
+  [scrollX]="'1600px'"
+  (sortChange)="onSortChange($event)"
+  (filterChange)="onFiltroServicioChange($event)"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+>
+</app-dynamic-table>
+
+<!-- Template para columna bloqueada (candados) -->
+<ng-template #bloqueadaTemplate let-row="row">
+  <button
+    nz-button
+    nzType="text"
+    title="{{ row.estatus === true || row.estatus === 'SÍ' ? 'Bloqueado' : 'Desbloqueado' }}"
+    nz-tooltip
+    nzTooltipTitle="{{ row.estatus === true || row.estatus === 'SÍ' ? 'En uso' : 'No en uso' }}"
+    class="action-btn-lock"
+    disabled
+  >
+    <i
+      nz-icon
+      [nzType]="row.estatus === true || row.estatus === 'SÍ' ? 'lock' : 'unlock'"
+      nzTheme="fill"
+      [style.font-size.px]="14"
+    ></i>
+  </button>
+</ng-template>
+
+<!-- Template para columna visible (switch) -->
+<ng-template #visibleTemplate let-row="row">
+  <ng-container *ngIf="row._renderVisible !== false">
+    <nz-switch
+      [ngModel]="row.visibleBoolean"
+      (ngModelChange)="onVisibleChange(row, $event)"
+      [nzCheckedChildren]="'SÍ'"
+      [nzUnCheckedChildren]="'NO'"
+      nz-tooltip
+      [nzTooltipTitle]="row.visibleBoolean ? 'Visible' : 'No visible'"
+    ></nz-switch>
+  </ng-container>
+</ng-template>
+<!-- Template para acciones (editar, ver detalle, eliminar) -->
+<ng-template #actionsTemplate let-row="row">
+  <button 
+    nz-button 
+    nzType="text" 
+    nz-dropdown 
+    [nzDropdownMenu]="menu"
+    nzPlacement="bottomRight"
+    title="Acciones"
+    class="action-btn-menu"
+  >
+    <i nz-icon nzType="more" nzTheme="outline"></i>
+  </button>
+  
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+      <li nz-menu-item *ngIf="row.estatus !== true && row.estatus !== 'SÍ'" (click)="editarEstructura(row)">
+        <i nz-icon nzType="edit" nzTheme="outline"></i>
+        Editar
+      </li>
+      <li nz-menu-item (click)="verDetalle(row)">
+        <i nz-icon nzType="eye" nzTheme="outline"></i>
+        Ver Detalle
+      </li>
+      <li nz-menu-divider *ngIf="row.estatus !== true && row.estatus !== 'SÍ'"></li>
+      <li nz-menu-item *ngIf="row.estatus !== true && row.estatus !== 'SÍ'" (click)="eliminarEstructura(row)">
+        <i nz-icon nzType="delete" nzTheme="outline"></i>
+        Eliminar
+      </li>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>

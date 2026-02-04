@@ -1,0 +1,121 @@
+.modal-genero {
+  padding: 20px 0;
+}
+
+.genero-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.required {
+  color: #ff4d4f;
+  margin-left: 4px;
+}
+
+.char-counter {
+  text-align: right;
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.error-message-general {
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 4px;
+  padding: 12px;
+  color: #ff4d4f;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.input-error {
+  border-color: #ff4d4f !important;
+}
+
+.input-error:focus {
+  border-color: #ff4d4f !important;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2) !important;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+:host ::ng-deep {
+  .ant-input {
+    border-radius: 4px;
+    padding: 8px 12px;
+  }
+
+  .ant-btn {
+    border-radius: 4px;
+    padding: 8px 24px;
+    height: auto;
+    font-weight: 500;
+  }
+
+  
+}
+
+form{
+  margin-top: 50px;
+}
+.cancelar{
+  background-color: #6C6E6D;
+  color: #fff;
+}
+.cancel-form-confirm{
+  border: 1px solid #DDE1E6;
+  .cancel-form-confirm-title{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #DDE1E6;
+    padding-left: 15px;
+    span{
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
+  .cancel-form-confirm-content{
+    text-align: center;
+    padding: 10px;
+    span{
+      display: block;
+    }
+    .buttons{
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+  }
+}

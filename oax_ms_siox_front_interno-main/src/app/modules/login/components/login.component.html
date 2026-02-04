@@ -1,0 +1,116 @@
+<div class="login-container">
+  <div class="login-card-wrapper">
+    <nz-card class="login-card" [nzBordered]="true">
+      <div class="login-header">
+        <div class="logo-container">
+          <!-- Aquí puedes agregar tu logo -->
+          <i nz-icon nzType="lock" nzTheme="outline" class="login-icon"></i>
+        </div>
+        <h1>Iniciar Sesión</h1>
+  
+      </div>
+
+      <!-- Mensaje de error -->
+      <nz-alert
+        *ngIf="errorMessage"
+        nzType="error"
+        [nzMessage]="errorMessage"
+        nzShowIcon
+        nzCloseable
+        (nzOnClose)="errorMessage = ''"
+        class="error-alert"
+      ></nz-alert>
+
+      <!-- Formulario de login -->
+      <form nz-form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <!-- Campo Correo -->
+        <nz-form-item>
+          <nz-form-label [nzRequired]="true" nzFor="correo">Correo</nz-form-label>
+          <nz-form-control [nzErrorTip]="correoErrorTpl">
+            <nz-input-group nzPrefixIcon="mail">
+              <input
+                nz-input
+                type="email"
+                id="correo"
+                formControlName="correo"
+                placeholder="usuario@ejemplo.com"
+                [disabled]="loading"
+              />
+            </nz-input-group>
+            <ng-template #correoErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Por favor ingrese su correo electrónico
+              </ng-container>
+              <ng-container *ngIf="control.hasError('email')">
+                Por favor ingrese un correo válido
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Campo Contraseña -->
+        <nz-form-item>
+          <nz-form-label [nzRequired]="true" nzFor="password">Contraseña</nz-form-label>
+          <nz-form-control [nzErrorTip]="passwordErrorTpl">
+            <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="lock">
+              <input
+                nz-input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                formControlName="password"
+                placeholder="Ingrese su contraseña"
+                [disabled]="loading"
+              />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+              <span
+                nz-icon
+                [nzType]="showPassword ? 'eye-invisible' : 'eye'"
+                (click)="togglePasswordVisibility()"
+                class="password-toggle"
+              ></span>
+            </ng-template>
+            <ng-template #passwordErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Por favor ingrese su contraseña
+              </ng-container>
+              <ng-container *ngIf="control.hasError('minlength')">
+                La contraseña debe tener al menos 6 caracteres
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Botón de submit -->
+        <nz-form-item class="login-form-button">
+          <button
+            nz-button
+            nzType="primary"
+            nzBlock
+            [nzLoading]="loading"
+            [disabled]="loading"
+            type="submit"
+          >
+            <span *ngIf="!loading">Ingresar</span>
+            <span *ngIf="loading">Iniciando sesión...</span>
+          </button>
+        </nz-form-item>
+
+        <!-- Enlaces adicionales -->
+        <div class="login-form-links">
+          <a (click)="onResetTwoFactor()" class="reset-link">
+            ¿Perdiste tu dispositivo 2FA?
+          </a>
+        </div>
+      </form>
+
+      <!-- Footer -->
+      <div class="login-footer">
+        <p class="security-note">
+          <i nz-icon nzType="safety" nzTheme="outline"></i>
+          Conexión segura con autenticación de dos factores
+        </p>
+      </div>
+    </nz-card>
+  </div>
+</div>

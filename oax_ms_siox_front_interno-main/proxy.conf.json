@@ -1,0 +1,50 @@
+{
+  "/auth": {
+    "target": "http://localhost:9292",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/cri": {
+    "target": "http://localhost:9293",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/conac": {
+    "target": "http://localhost:9293",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/genero": {
+    "target": "http://localhost:9293",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/tipoPeriodo": {
+    "target": "http://localhost:9293",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/estructuraCuentas": {
+    "target": "http://localhost:9293",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/domicilio": {
+    "target": "http://localhost:9293",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/plantillas": {
+    "target": "http://localhost:9293",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

@@ -1,0 +1,194 @@
+<!-- Alerta genérica -->
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb-container">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a routerLink="/"><i nz-icon nzType="home"></i></a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a>CONTROL DE INGRESO</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a>ADMINISTRADOR CONTABLE DEL INGRESO</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a>CLASIFICADORES Y CATÁLOGOS</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a>CATÁLOGOS DE APOYO</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/estructura-cuenta/listado-estructura-cuenta">ESTRUCTURA DE CUENTAS</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <span *ngIf="modo === 'crear'">NUEVO REGISTRO DE ESTRUCTURA DE CUENTAS</span>
+      <span *ngIf="modo === 'editar'">EDITAR ESTRUCTURA DE CUENTAS</span>
+      <span *ngIf="modo === 'detalle'">DETALLE DE ESTRUCTURA DE CUENTAS</span>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+</div>
+
+<!-- Título -->
+<h2 class="page-title">{{ tituloSeccion }}</h2>
+
+<!-- Formulario único -->
+<div class="form-container">
+  <p class="form-instructions" *ngIf="modo !== 'detalle'">
+    POR FAVOR, COMPLETE LOS SIGUIENTES CAMPOS PARA {{ modo === 'editar' ? 'ACTUALIZAR EL' : 'GENERAR UN' }} REGISTRO{{ modo === 'editar' ? '' : ' NUEVO' }}.
+  </p>
+  <p class="form-instructions" *ngIf="modo === 'detalle'">
+    DETALLES DE LA ESTRUCTURA DE CUENTAS
+  </p>
+
+  <form nz-form class="form-estructura">
+    <!-- Configuración inicial -->
+    <div [formGroup]="formConfiguracion" class="configuracion-section">
+      <div class="form-row">
+        <!-- Número de Niveles -->
+        <div class="form-field">
+          <label class="field-label">
+            NÚMERO DE NIVELES<span class="required">*</span>
+          </label>
+          <nz-select
+            formControlName="numeroNiveles"
+            nzPlaceHolder="SELECCIONE"
+            nzShowSearch
+            (ngModelChange)="onNivelesChange($event)"
+            class="full-width"
+          >
+            <nz-option
+              *ngFor="let opt of opcionesNiveles"
+              [nzLabel]="opt.label"
+              [nzValue]="opt.value"
+            ></nz-option>
+          </nz-select>
+          <div class="error-message" *ngIf="formConfiguracion.get('numeroNiveles')?.invalid && formConfiguracion.get('numeroNiveles')?.touched">
+            Este campo es requerido
+          </div>
+        </div>
+
+        <!-- Descripción de la Estructura -->
+        <div class="form-field">
+          <label class="field-label">
+            DESCRIPCIÓN DE LA ESTRUCTURA<span class="required">*</span>
+          </label>
+          <input
+            nz-input
+            formControlName="descripcionEstructura"
+            placeholder="ESTRUCTURA 11"
+            maxlength="50"
+            class="full-width"
+            (input)="limitarCaracteres($event, 50)"
+          />
+          <div class="char-counter">
+            {{ formConfiguracion.get('descripcionEstructura')?.value?.length || 0 }}/50
+          </div>
+          <div class="error-message" *ngIf="formConfiguracion.get('descripcionEstructura')?.invalid && formConfiguracion.get('descripcionEstructura')?.touched">
+            Este campo es requerido
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Niveles (se muestran solo si hay niveles seleccionados) -->
+    <div *ngIf="nivelesSeleccionados > 0" [formGroup]="formNiveles" class="niveles-section">
+      <h3 class="section-title">NIVELES</h3>
+
+      <div *ngFor="let nivel of nivelesArray" class="nivel-item">
+        <h4 class="nivel-title">NIVEL {{ nivel }}</h4>
+
+        <div class="nivel-fields">
+          <!-- Longitud de Caracteres -->
+          <div class="form-field">
+            <label class="field-label">
+              LONGITUD DE CARACTERES<span class="required">*</span>
+            </label>
+            <nz-select
+              *ngIf="nivel > 3"
+              [formControlName]="'nivel' + nivel + '_longitud'"
+              nzPlaceHolder="SELECCIONE"
+              class="full-width"
+            >
+              <nz-option
+                *ngFor="let opt of opcionesLongitud"
+                [nzLabel]="opt.label"
+                [nzValue]="opt.value"
+              ></nz-option>
+            </nz-select>
+            <input
+              *ngIf="nivel <= 3"
+              nz-input
+              [formControlName]="'nivel' + nivel + '_longitud'"
+              class="full-width disabled-input"
+              readonly
+            />
+          </div>
+
+          <!-- Descripción -->
+          <div class="form-field">
+            <label class="field-label">
+              DESCRIPCIÓN<span class="required">*</span>
+            </label>
+            <input
+              nz-input
+              [formControlName]="'nivel' + nivel + '_descripcion'"
+              [placeholder]="nivel > 3 ? 'INGRESE LA DESCRIPCIÓN' : ''"
+              [maxlength]="50"
+              [readonly]="nivel <= 3"
+              [class.disabled-input]="nivel <= 3"
+              class="full-width"
+              (input)="limitarCaracteres($event, 50)"
+            />
+            <div class="char-counter" *ngIf="nivel > 3">
+              {{ formNiveles.get('nivel' + nivel + '_descripcion')?.value?.length || 0 }}/50
+            </div>
+            <div class="error-message" *ngIf="formNiveles.get('nivel' + nivel + '_descripcion')?.invalid && formNiveles.get('nivel' + nivel + '_descripcion')?.touched">
+              Este campo es requerido
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secuencia (se muestra solo si hay niveles seleccionados) -->
+    <div *ngIf="nivelesSeleccionados > 0" class="secuencia-section">
+      <h3 class="section-title">SECUENCIA</h3>
+      
+      <div class="secuencia-grid">
+        <div *ngFor="let nivel of nivelesArray" class="secuencia-item">
+          <label class="secuencia-label">NIVEL {{ nivel }}</label>
+          <input
+            nz-input
+            [value]="getSecuenciaNivel(nivel)"
+            readonly
+            class="secuencia-input disabled-input"
+          />
+        </div>
+      </div>
+
+    
+    </div>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button nz-button nzType="default" (click)="cancelar()">
+        {{ modo === 'detalle' ? 'VOLVER' : 'CANCELAR' }}
+      </button>
+      <button *ngIf="modo !== 'detalle'" nz-button nzType="primary" (click)="guardarEstructura()">
+        {{ modo === 'editar' ? 'ACTUALIZAR' : 'GUARDAR' }}
+      </button>
+    </div>
+  </form>
+</div>

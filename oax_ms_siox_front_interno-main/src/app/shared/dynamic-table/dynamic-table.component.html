@@ -1,0 +1,211 @@
+<!-- shared/dynamic-table/dynamic-table.component.html -->
+<div class="multi-sort-hint" style="text-align:center; color:#888; font-size:13px; margin-bottom:8px;">
+  Para ordenar por varias columnas, mantén presionada la tecla <b>Ctrl</b> (o <b>Cmd</b> en Mac) y haz clic en los íconos de ordenamiento.
+</div>
+<div #tableWrap class="dynamic-table-wrap">
+<nz-table
+  class="dynamic-table"
+  [ngClass]="tableClass"
+  [nzData]="viewData"
+  [nzBordered]="bordered"
+  [nzFrontPagination]="frontPagination"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  [nzTotal]="total ?? viewData.length"
+  [nzScroll]="nzScroll"
+  [nzLoading]="loading"
+  [nzShowPagination]="false"
+  [nzNoResult]="noDataTemplate"
+>
+  <ng-template #noDataTemplate>
+    <div class="empty-state-container" [style.height]="computedEmptyStateHeight" *ngIf="showEmptyState">
+      <div class="empty-state-content">
+        <img 
+          class="empty-state-icon" 
+          [src]="'assets/' + computedEmptyStateIcon" 
+          [alt]="computedEmptyStateMessage"
+        />
+        <p class="empty-state-description">{{ computedEmptyStateMessage }}</p>
+        <p class="empty-state-description">{{ computedEmptyStateDescription }}</p>
+      </div>
+    </div>
+  </ng-template>
+  <thead>
+    <tr>
+      <th *ngIf="showIndex" class="index-col">#</th>
+
+      <th
+        *ngFor="let col of columns"
+        [style.width]="col.width || null"
+        [style.text-align]="getColumnAlign(col)"
+      >
+        <!-- título + sorters -->
+        <div class="th-wrap">
+          <span class="title">{{ col.title }}</span>
+
+          <span class="sorters" *ngIf="col.sortable">
+            <i
+              nz-icon
+              nzType="arrow-up"
+              nzTheme="outline"
+              (click)="setSort(col.key, 'ascend', $event)"
+              [class.active]="getSortDirection(col.key) === 'ascend'"
+            ></i>
+            <i
+              nz-icon
+              nzType="arrow-down"
+              nzTheme="outline"
+              (click)="setSort(col.key, 'descend', $event)"
+              [class.active]="getSortDirection(col.key) === 'descend'"
+            ></i>
+            <span *ngIf="getSortPriority(col.key) !== null" class="sort-priority">{{ getSortPriority(col.key) }}</span>
+          </span>
+        </div>
+
+        <!-- filtros dinámicos (segunda línea) -->
+        <div class="filter-wrap" *ngIf="col.filter" style="margin-top: 4px;">
+          <ng-container [ngSwitch]="col.filter">
+            <!-- filtro de texto -->
+            <input
+              *ngSwitchCase="'text'"
+              nz-input
+              placeholder="FILTRAR"
+              [(ngModel)]="filters[col.key]"
+              (ngModelChange)="onFilterChange()"
+            />
+
+            <!-- filtro select -->
+            <nz-select
+              *ngSwitchCase="'select'"
+              nzAllowClear
+              nzPlaceHolder="FILTRAR"
+              [(ngModel)]="filters[col.key]"
+              (ngModelChange)="onFilterChange()"
+              style="width: 100%;"
+            >
+              <nz-option
+                *ngFor="let opt of col.selectOptions || []"
+                [nzLabel]="opt.label"
+                [nzValue]="opt.value"
+              ></nz-option>
+            </nz-select>
+
+            <!-- filtro fecha -->
+            <nz-date-picker
+              *ngSwitchCase="'date'"
+              nzFormat="yyyy-MM-dd"
+              nzPlaceHolder="FILTRAR"
+              [nzInputReadOnly]="true"
+              [(ngModel)]="filters[col.key]"
+              (ngModelChange)="onFilterChange()"
+              style="width: 100%;"
+            ></nz-date-picker>
+          </ng-container>
+        </div>
+      </th>
+
+      <!-- columna de acciones -->
+      <th *ngIf="actionsTemplate" [style.width]="actionsWidth">{{ actionsHeader }}</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr
+      *ngFor="let row of viewData; index as i; trackBy: trackByIndex"
+      (click)="rowClick.emit(row)"
+    >
+      <td *ngIf="showIndex" class="index-col">{{ i + 1 }}</td>
+
+      <td *ngFor="let col of columns" [style.text-align]="getColumnAlign(col)">
+        <ng-container [ngSwitch]="col.type || 'text'">
+          <!-- tipo fecha -->
+          <ng-container *ngSwitchCase="'date'">
+            {{ getCell(row, col.key) | date : (col.dateFormat || 'dd/MM/yyyy') }}
+          </ng-container>
+
+          <!-- tipo tag -->
+          <ng-container *ngSwitchCase="'tag'">
+            <nz-tag
+              [nzColor]="col.tagColorMap ? col.tagColorMap(getCell(row, col.key), row) : 'blue'"
+            >
+              {{ getCell(row, col.key) }}
+            </nz-tag>
+          </ng-container>
+
+          <!-- tipo template -->
+          <ng-container *ngSwitchCase="'template'">
+            <ng-container *ngIf="col.cellTemplate as tpl">
+              <ng-container
+                *ngTemplateOutlet="tpl; context: { $implicit: getCell(row, col.key), row: row }"
+              ></ng-container>
+            </ng-container>
+          </ng-container>
+
+          <!-- default -->
+          <ng-container *ngSwitchDefault>
+            <span
+              class="cell-text-ellipsis"
+              nz-tooltip
+              [nzTooltipTitle]="shouldShowTooltip(row, col) ? getTextCellValue(row, col) : null"
+              nzTooltipPlacement="topLeft"
+            >
+              {{ getDisplayText(row, col) }}
+            </span>
+          </ng-container>
+        </ng-container>
+      </td>
+
+      <!-- acciones -->
+      <td *ngIf="actionsTemplate">
+        <ng-container
+          *ngTemplateOutlet="actionsTemplate; context: { row: row }"
+        ></ng-container>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+</div>
+<div class="pager-bar" *ngIf="totalItems > 0">
+  <div class="left">
+    <div class="label">MOSTRANDO REGISTROS DEL {{ rangeStart }} AL {{ rangeEnd }}</div>
+    <div class="sub">DE UN TOTAL DE {{ totalItems }}</div>
+  </div>
+
+<div class="center pager-mock">
+  <!-- Ir al principio -->
+  <button class="btn-nav" (click)="onExternalPageIndexChange(1)" [disabled]="pageIndex === 1">«</button>
+  <!-- Página anterior -->
+  <button class="btn-nav" (click)="onExternalPageIndexChange(pageIndex - 1)" [disabled]="pageIndex === 1">‹</button>
+
+  <span class="label">PÁGINA</span>
+
+  <!-- Números 1,2,3,4… (sin flechas internas) -->
+  <nz-pagination
+    class="pager numbers-only"
+    [nzPageIndex]="pageIndex"
+    [nzTotal]="totalItems"
+    [nzPageSize]="pageSize"
+    [nzShowSizeChanger]="false"
+    (nzPageIndexChange)="onExternalPageIndexChange($event)">
+  </nz-pagination>
+
+  <span class="de">DE {{ totalPages }}</span>
+
+  <!-- Página siguiente -->
+  <button class="btn-nav" (click)="onExternalPageIndexChange(pageIndex + 1)" [disabled]="pageIndex === totalPages">›</button>
+  <!-- Ir al final -->
+  <button class="btn-nav" (click)="onExternalPageIndexChange(totalPages)" [disabled]="pageIndex === totalPages">»</button>
+</div>
+
+  <div class="right">
+    <span class="label">ELEMENTOS POR PÁGINA</span>
+    <nz-select
+      class="page-size"
+      [ngModel]="pageSize"
+      (ngModelChange)="onExternalPageSizeChange($event)"
+      style="width: 72px;">
+      <nz-option *ngFor="let s of pageSizeOptions" [nzLabel]="s" [nzValue]="s"></nz-option>
+    </nz-select>
+  </div>
+</div>
+

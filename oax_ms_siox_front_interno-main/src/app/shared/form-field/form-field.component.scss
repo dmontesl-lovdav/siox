@@ -1,0 +1,194 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+
+  // Label
+  .field-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 4px;
+
+    .required {
+      color: #ff4d4f;
+      font-size: 14px;
+      line-height: 1;
+      margin-left: 2px;
+    }
+  }
+
+  // Contenedor del input con iconos
+  .input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input {
+      width: 100%;
+      height: 40px;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      outline: none;
+      transition: all 0.3s;
+      background-color: #fff;
+      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      box-sizing: border-box;
+
+      &::placeholder {
+        color: #bfbfbf;
+        font-size: 13px;
+      }
+
+      &:hover:not(:disabled):not(.input-error) {
+        border-color: #40a9ff;
+      }
+
+      &:focus:not(.input-error) {
+        border-color: #40a9ff;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+      }
+
+      &.input-error {
+        border-color: #ff4d4f !important;
+        border-radius: 6px;
+        background-color: #fafafa;
+
+        &:focus {
+          border-color: #ff4d4f !important;
+          border-radius: 6px;
+          box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
+        }
+
+        &:hover {
+          border-color: #ff4d4f !important;
+          border-radius: 6px;
+        }
+      }
+
+      &:disabled {
+        background-color: #f5f5f5;
+        color: rgba(0, 0, 0, 0.25);
+        cursor: not-allowed;
+      }
+
+      &:read-only {
+        background-color: #fafafa;
+        cursor: default;
+      }
+    }
+
+    // Contador al lado de los iconos
+    .char-counter-inline {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: #999;
+      pointer-events: none;
+      z-index: 5;
+      white-space: nowrap;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 0 4px;
+    }
+
+    // Botón para limpiar
+    .clear-button {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #bfbfbf;
+      transition: color 0.3s;
+      z-index: 3;
+
+      &:hover {
+        color: #666;
+      }
+
+      i {
+        font-size: 14px;
+      }
+    }
+
+    // Icono de error
+    .error-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ff4d4f;
+      font-size: 16px;
+      pointer-events: none;
+      z-index: 4;
+    }
+  }
+
+  // Contador de caracteres y errores
+  .error-and-counter {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 4px;
+  }
+
+  // Contenedor de mensajes de error
+  .error-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .error-message {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #ff4d4f;
+      font-weight: 400;
+      font-style: italic;
+    }
+  }
+
+  // Contador de caracteres
+  .char-counter {
+    font-size: 12px;
+    color: #999;
+    text-align: right;
+    margin-top: 0px;
+  }
+
+  // Mensaje informativo (cuando se alcanza el límite)
+  .info-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 2px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #ff4d4f;
+    font-weight: 400;
+    font-style: italic;
+    margin-top: 4px;
+  }
+}
+
+// Ajuste para el padding del input cuando hay botón clear
+input:not(.input-error) {
+  padding-right: 50px !important;
+}

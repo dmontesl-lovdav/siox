@@ -1,0 +1,62 @@
+/* src/styles/_tokens-custom.scss */
+:root {
+  /* Tipografía */
+  --font-sans: 'Montserrat', sans-serif;
+
+  /* Global */
+  --layout-bg: #f7f7f7;
+  --surface: #ffffff;
+  --surface-weak: #f9f9f9;
+  --hover-surface: #fdfaf4;
+
+  --text: #3D3D3D;
+  --text-strong: #212121;
+  --text-muted: #646464;
+  --placeholder: #9e9e9e;
+
+  --border: #d9d9d9;
+  --border-soft: #f0f0f0;
+  --ring: rgba(179,142,93,0.2);
+
+  /* Marca / encabezados */
+  --brand: #1f4f3f;
+  --on-brand: #ffffff;
+  --brand-2: #B38E5D;
+  --header-bg: #285C4D;
+  --header-fg: #ffffff;
+
+  /* Tabla (Ant) */
+  --table-head-bg: #F1ECE6;
+  --table-head-fg: #3D3D3D;
+  --table-sorter-bg: #f9f5ef;
+  --table-th-border: #C7C7CC;
+  --accent: #B03848; /* flechas rojo */
+
+  /* Paginación / resaltados */
+  --pagination-active-bg: #E8DFD3;
+  --pagination-active-border: #E8DFD3;
+
+  /* Botones */
+  --btn-primary-bg: #1f4f3f;
+  --btn-primary-fg: #ffffff;
+  --btn-primary-hover-bg: #174037;
+
+  --btn-mass-bg: #d6e8d6;
+  --btn-mass-fg: #1f4f3f;
+  --btn-mass-border: #b4d3b4;
+  --btn-mass-hover-bg: #c1dec1;
+
+  --icon-button-border: #B38E5D;
+  --icon-button-fg: #B38E5D;
+  --icon-button-hover-bg: #f3efe8;
+
+  /* Breadcrumb */
+  --breadcrumb-bg: #ffffff;
+  --breadcrumb-fg: #000000;
+  --breadcrumb-strong: #ccc08d;
+
+  /* Sidebar / menú / footer (opcionales) */
+  --sidebar-bg: #f9f9fb;
+  --menu-accent: #8e44ad;
+  --footer-fg: #214D40;
+}

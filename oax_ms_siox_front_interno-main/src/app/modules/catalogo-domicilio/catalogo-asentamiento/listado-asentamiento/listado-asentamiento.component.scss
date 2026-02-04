@@ -1,0 +1,179 @@
+/* Estilos para el componente listado-genero */
+
+/* Breadcrumb */
+.breadcrumb-container {
+  margin-bottom: 1rem;
+  
+  ::ng-deep {
+    .ant-breadcrumb {
+      font-size: 12px;
+      
+      a {
+        color: #666;
+        text-decoration: none;
+        
+        &:hover {
+          color: #0d5a4a;
+        }
+      }
+      
+      .ant-breadcrumb-separator {
+        color: #999;
+      }
+      
+      .ant-breadcrumb-link {
+        span {
+          color: #333;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+/* Título principal */
+.page-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #c17a3a;
+  text-transform: uppercase;
+}
+
+/* Subtítulo de la tabla */
+.titulo-cri {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: var(--brand-2);
+  padding-left: 80px;
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+}
+
+/* ============ Barra superior ============ */
+.header-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  margin-left: 0;
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+
+  /* Botones de acción */
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      height: 42px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font-sans, 'Montserrat', sans-serif);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 1px;
+    }
+
+
+    /* Icon buttons secundarios */
+    .botones-secundarios {
+      display: flex;
+      gap: 10px;
+
+      .icon-button {
+        width: 30px;
+        height: 30px;
+        border: 1px solid var(--icon-button-border, #0d5a4a);
+        background-color: transparent;
+        border-radius: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        i { font-size: 18px; color: var(--icon-button-fg, #0d5a4a); }
+
+        &:hover { 
+          background-color: var(--icon-button-hover-bg, #f0f0f0);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .header-bar {
+    gap: 24px;
+    margin-left: 24px;
+  }
+  .titulo-cri {
+    padding-left: 24px;
+  }
+}
+
+.alert-top-right {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.alert-animate {
+  animation: slideInRight 0.3s ease-in-out;
+}
+
+/* Estilos uniformes para botones de acciones */
+::ng-deep {
+  .action-btn-lock,
+  .action-btn-edit,
+  .action-btn-view {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #285C4D !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 4px !important;
+    background-color: #f5f5f5 !important;
+
+    i {
+      font-size: 16px !important;
+      color: #285C4D !important;
+      margin-right: 0 !important;
+    }
+
+    &:hover {
+      background-color: #efefef !important;
+      border-color: #b3b3b3 !important;
+    }
+
+    &:focus,
+    &:active {
+      background-color: #efefef !important;
+      border-color: #b3b3b3 !important;
+    }
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,77 @@
+<nz-modal [(nzVisible)]="visible" [nzFooter]="null" (nzOnCancel)="onCancel()" nzWidth="900px" [nzStyle]="{ height: '900px' }" [nzMaskClosable]="false" [nzClosable]="true">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="form" (ngSubmit)="onGuardar()" autocomplete="off">
+      <h2 class="modal-title modal-title-lg">{{tituloModal | uppercase}}</h2>
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="isRubroTipoClase ? 12 : 24">
+          <nz-form-item>
+            <nz-form-label [nzFor]="'clave'" nzRequired>Clave{{tagTipo}}</nz-form-label>
+            <nz-form-control>
+              <input nz-input id="clave" [value]="registro?.clave" readonly />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12" *ngIf="isRubroTipoClase || isConcepto">
+          <nz-form-item>
+            <nz-form-label [nzFor]="'nombre'" nzRequired>Nombre{{tagTipo}}</nz-form-label>
+            <nz-form-control [nzValidateStatus]="form.get('nombre') ?? ''">
+              <input nz-input id="nombre" formControlName="nombre" placeholder="NOMBRE" />
+              <ng-container *ngIf="form.get('nombre')?.invalid && (form.get('nombre')?.dirty || form.get('nombre')?.touched)">
+                <div *ngIf="form.get('nombre')?.errors?.['required']" class="error-msg">Este campo es obligatorio.</div>
+                <div *ngIf="form.get('nombre')?.errors?.['minlength']" class="error-msg">Este campo debe contener como mínimo 5 caracteres.</div>
+                <div *ngIf="form.get('nombre')?.errors?.['maxlength']" class="error-msg">Este campo debe contener como máximo 250 caracteres.</div>
+                <div class="error-msg">Sólo se permiten letras, números, espacios y acentos.</div>
+              </ng-container>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzFor]="'descripcion'" nzRequired>Descripción{{tagTipo}}</nz-form-label>
+            <nz-form-control [nzValidateStatus]="form.get('descripcion') ?? ''">
+              <input nz-input id="descripcion" formControlName="descripcion" placeholder="DESCRIPCIÓN" />
+              <ng-container *ngIf="form.get('descripcion')?.invalid && (form.get('descripcion')?.dirty || form.get('descripcion')?.touched)">
+                <div *ngIf="form.get('descripcion')?.errors?.['required']" class="error-msg">Este campo es obligatorio.</div>
+                <div *ngIf="form.get('descripcion')?.errors?.['minlength']" class="error-msg">Este campo debe contener como mínimo 5 y un máximo 200 caracteres.</div>
+                <div class="error-msg">Sólo se permiten letras, números, espacios y acentos.</div>
+              </ng-container>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24" *ngIf="isConcepto">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzFor]="'inicioVigencia'" nzRequired>Inicio de Vigencia</nz-form-label>
+            <nz-form-control [nzValidateStatus]="form.get('inicioVigencia') ?? ''">
+              <input nz-input id="inicioVigencia" type="date" formControlName="inicioVigencia" placeholder="DD/MM/AAAA" />
+              <ng-container *ngIf="form.get('inicioVigencia')?.invalid && (form.get('inicioVigencia')?.dirty || form.get('inicioVigencia')?.touched)">
+                <div *ngIf="form.get('inicioVigencia')?.errors?.['required']" class="error-msg">La fecha debe ser igual o posterior a la fecha de alta.<br>Este campo es obligatorio.</div>
+                <div *ngIf="form.get('inicioVigencia')?.errors?.['inicioMenorActual']" class="error-msg">La fecha debe ser igual o posterior a la fecha de alta.</div>
+                <div *ngIf="form.get('inicioVigencia')?.errors?.['inicioMayorFin']" class="error-msg">La fecha de inicio no puede ser mayor a la fecha fin.</div>
+              </ng-container>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzFor]="'finVigencia'" nzRequired>Fin de Vigencia</nz-form-label>
+            <nz-form-control [nzValidateStatus]="form.get('finVigencia') ?? ''">
+              <input nz-input id="finVigencia" type="date" formControlName="finVigencia" placeholder="DD/MM/AAAA" />
+              <ng-container *ngIf="form.get('finVigencia')?.invalid && (form.get('finVigencia')?.dirty || form.get('finVigencia')?.touched)">
+                <div *ngIf="form.get('finVigencia')?.errors?.['required']" class="error-msg">LA FECHA DEBE SER POSTERIOR A LA FECHA DE INICIO DE VIGENCIA.<br>ESTE CAMPO ES OBLIGATORIO.</div>
+                <div *ngIf="form.get('finVigencia')?.errors?.['finMenorIgualInicio']" class="error-msg">La fecha de fin debe ser mayor a la fecha de inicio.</div>
+              </ng-container>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button nz-button nzType="default" type="button" (click)="onCancel()" class="btn-cancelar btn-rounded">✗ CANCELAR</button>
+        <button nz-button nzType="primary" [disabled]="!form.valid" type="submit" class="btn-guardar btn-rounded">✔ GUARDAR</button>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

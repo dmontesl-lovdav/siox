@@ -1,0 +1,82 @@
+<div class="modal-genero">
+
+  <form nz-form [formGroup]="form" class="genero-form">
+    
+    <!-- Mensaje de error general -->
+    <div *ngIf="errorMessages['general']" class="error-message-general">
+      <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      {{ errorMessages['general'] }}
+    </div>
+
+    <!-- Campo CLAVE -->
+    <div class="form-field">
+      <label class="field-label">
+        CLAVE<span class="required">*</span>
+      </label>
+      <input
+        nz-input
+        formControlName="clave"
+        placeholder="INGRESE CLAVE"
+        maxlength="4"
+        (keydown)="validarClave($event)"
+        (input)="limitarCaracteres($event, 4)"
+        [class.input-error]="isFieldInvalid('clave')"
+        style="text-transform: uppercase;"
+      />
+      <div class="char-counter">
+        {{ form.get('clave')?.value?.length || 0 }}/4
+      </div>
+      <div class="error-message" *ngIf="isFieldInvalid('clave')">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        {{ getErrorMessage('clave') }}
+      </div>
+    </div>
+
+    <!-- Campo DESCRIPCIÓN -->
+    <div class="form-field">
+      <label class="field-label">
+        DESCRIPCIÓN<span class="required">*</span>
+      </label>
+      <input
+        nz-input
+        formControlName="descripcion"
+        placeholder="INGRESE DESCRIPCIÓN"
+        maxlength="100"
+        (input)="limitarCaracteres($event, 100)"
+        [class.input-error]="isFieldInvalid('descripcion')"
+        style="text-transform: uppercase;"
+      />
+      <div class="char-counter">
+        {{ form.get('descripcion')?.value?.length || 0 }}/100
+      </div>
+      <div class="error-message" *ngIf="isFieldInvalid('descripcion')">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        {{ getErrorMessage('descripcion') }}
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button 
+        nz-button 
+        nzType="default" 
+        (click)="cancelar()"
+        [disabled]="loading"
+      >
+        <i nz-icon nzType="close" class="icon-cancelar" style="margin-right: 4px;"></i>
+        CANCELAR
+      </button>
+      <button 
+        *ngIf="modo !== 'consultar'"
+        nz-button 
+        nzType="primary" 
+        (click)="guardar()"
+        [nzLoading]="loading"
+        style="background-color: #0d5a4a; border-color: #0d5a4a;"
+      >
+        <i nz-icon nzType="check" class="icon-guardar" style="margin-right: 4px;"></i>
+        GUARDAR
+      </button>
+    </div>
+  </form>
+</div>

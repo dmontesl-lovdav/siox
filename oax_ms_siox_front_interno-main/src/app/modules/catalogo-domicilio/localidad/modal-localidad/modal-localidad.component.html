@@ -1,0 +1,112 @@
+<div class="modal-genero">
+
+  <form nz-form [formGroup]="form" class="genero-form">
+    
+    <!-- Mensaje de error general -->
+    <div *ngIf="errorMessages['general']" class="error-message-general">
+      <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      {{ errorMessages['general'] }}
+    </div>
+
+    <!-- Select de Municipio con paginación -->
+    <div class="form-field">
+      <label class="field-label">
+        MUNICIPIO<span class="required">*</span>
+      </label>
+      <nz-select
+        formControlName="municipio"
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Seleccione un municipio"
+        [nzLoading]="loadingMunicipios"
+        (nzScrollToBottom)="onScrollMunicipios()"
+        (nzSearchChange)="onSearchMunicipio($event)"
+        style="width: 100%"
+        [compareWith]="compareMunicipio"
+        [disabled]="modo === 'consultar'"
+      >
+        <nz-option *ngFor="let m of municipios" [nzValue]="m" [nzLabel]="m.municipio">{{ m.municipio }}</nz-option>
+      </nz-select>
+      <div class="error-message" *ngIf="isFieldInvalid('municipio')">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        {{ getErrorMessage('municipio') }}
+      </div>
+    </div>
+
+    <!-- Campo CLAVE -->
+    <div class="form-field">
+      <label class="field-label">
+        CLAVE LOCALIDAD<span class="required">*</span>
+      </label>
+      <input
+        nz-input
+        formControlName="clave"
+        placeholder="INGRESE CLAVE"
+        maxlength="6"
+        inputmode="numeric"
+        pattern="^[0-9]{1,6}$"
+        (keydown)="validarClave($event)"
+        (input)="limitarCaracteres($event, 6)"
+        [class.input-error]="isFieldInvalid('clave')"
+      />
+      <div class="char-counter">
+        {{ form.get('clave')?.value?.length || 0 }}/6
+      </div>
+      <div class="error-message" *ngIf="isFieldInvalid('clave')">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        {{ getErrorMessage('clave') }}
+      </div>
+      <div class="error-message" *ngIf="claveExistente">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        LA CLAVE INGRESADA YA EXISTE
+      </div>
+    </div>
+
+    <!-- Campo DESCRIPCIÓN -->
+    <div class="form-field">
+      <label class="field-label">
+        DESCRIPCIÓN LOCALIDAD<span class="required">*</span>
+      </label>
+      <input
+        nz-input
+        formControlName="descripcion"
+        placeholder="INGRESE DESCRIPCIÓN"
+        maxlength="100"
+        (input)="limitarCaracteres($event, 100)"
+        [class.input-error]="isFieldInvalid('descripcion')"
+        style="text-transform: uppercase;"
+      />
+      <div class="char-counter">
+        {{ form.get('descripcion')?.value?.length || 0 }}/100
+      </div>
+      <div class="error-message" *ngIf="isFieldInvalid('descripcion')">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        {{ getErrorMessage('descripcion') }}
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button 
+        nz-button 
+        nzType="default" 
+        (click)="cancelar()"
+        [disabled]="loading"
+      >
+        <i nz-icon nzType="close" class="icon-cancelar" style="margin-right: 4px;"></i>
+        CANCELAR
+      </button>
+      <button 
+        *ngIf="modo !== 'consultar'"
+        nz-button 
+        nzType="primary" 
+        (click)="guardar()"
+        [nzLoading]="loading"
+        style="background-color: #0d5a4a; border-color: #0d5a4a;"
+      >
+        <i nz-icon nzType="check" class="icon-guardar" style="margin-right: 4px;"></i>
+        GUARDAR
+      </button>
+    </div>
+  </form>
+</div>

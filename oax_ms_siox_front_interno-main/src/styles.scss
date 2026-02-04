@@ -1,0 +1,141 @@
+@use "styles/tokens-custom" as *; // antes: @import 'styles/tokens-custom';
+
+/* Importar fuentes de Google */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+
+html,
+body {
+  background: var(--layout-bg);
+  color: var(--text);
+  font-family: var(--font-sans, "Montserrat", sans-serif);
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Ajustes globales para responsividad */
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/*
+  IMPORTANTe:
+  No aplicar estilos globales a <table>.
+  (ng-zorro/ant tables dependen del layout nativo de table; poner display:block rompe anchos/scroll).
+
+  Si alguna tabla necesita scroll horizontal, debe hacerse en su contenedor.
+*/
+
+/* Media queries globales */
+@media (max-width: 1200px) {
+  html {
+    font-size: 16px;
+  }
+}
+@media (max-width: 900px) {
+  html {
+    font-size: 15px;
+  }
+}
+@media (max-width: 600px) {
+  html {
+    font-size: 14px;
+  }
+  body {
+    padding: 0 2vw;
+  }
+}
+@media (max-width: 400px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+::ng-deep .cdk-overlay-backdrop {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Tablas con Roboto */
+::ng-deep {
+  .ant-table {
+    font-family: 'Roboto', sans-serif !important;
+    
+    /* Encabezados de tabla */
+    .ant-table-thead > tr > th {
+      font-family: 'Roboto', sans-serif !important;
+      font-weight: 500;
+    }
+    
+    /* Contenido de tabla */
+    .ant-table-tbody > tr > td {
+      font-family: 'Roboto', sans-serif !important;
+      font-weight: 400;
+    }
+    
+    /* Footer de tabla */
+    .ant-table-footer {
+      font-family: 'Montserrat', sans-serif !important;
+    }
+  }
+}
+
+::ng-deep .custom-menu-modal .ant-modal-content {
+  border-radius: 12px !important;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0) !important;
+  padding: 0 !important;
+}
+
+.icon-table-buttons {
+  border-radius: 5px !important;
+}
+
+.btn-nuevo {
+  color: var(--btn-primary-fg, #ffffff);
+  background-color: var(--btn-primary-bg, #0d5a4a);
+  border-radius: 5px !important;
+  &:hover {
+    background-color: var(--btn-primary-hover-bg, #0a4838);
+    opacity: 0.9;
+  }
+}
+
+  .ant-alert-success{
+    min-height: 80px;
+    background-color: #A6D296;
+    font-weight: 600;
+    .anticon{
+      svg{
+        font-size: 21px;
+      }
+    }
+  }
+
+  .page-title{
+    color: #B38E5D !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+  }
+
+  .modal-title{
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color:#285C4D !important;
+    border-bottom: 2px solid #285C4D;
+  }
+  .ant-modal-content{
+    border-radius: 20px !important;
+  }

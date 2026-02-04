@@ -1,0 +1,89 @@
+<div class="modal-inmueble">
+
+  <form nz-form [formGroup]="form" class="inmueble-form">
+
+    <!-- Mensaje de error general -->
+    <div *ngIf="errorMessages['general']" class="error-message-general">
+      <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      {{ errorMessages['general'] }}
+    </div>
+
+    <!-- ✅ Campo TIPO DE ÁMBITO (como en la imagen) -->
+    <div class="form-field">
+      <label class="field-label">
+        TIPO DE ÁMBITO<span class="required">*</span>
+      </label>
+
+      <nz-select
+        formControlName="tipoAmbito"
+        nzPlaceHolder="SELECCIONA"
+        [class.input-error]="isFieldInvalid('tipoAmbito')"
+        style="width: 100%;"
+      >
+        <nz-option
+          *ngFor="let a of ambitos"
+          [nzLabel]="a.label"
+          [nzValue]="a.value"
+        ></nz-option>
+      </nz-select>
+
+      <div class="error-message" *ngIf="isFieldInvalid('tipoAmbito')">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        {{ getErrorMessage('tipoAmbito') }}
+      </div>
+    </div>
+
+    <!-- Campo DESCRIPCIÓN -->
+    <div class="form-field">
+      <label class="field-label">
+        DESCRIPCIÓN<span class="required">*</span>
+      </label>
+
+      <nz-input-group nzAllowClear>
+        <input
+          nz-input
+          formControlName="descripcion"
+          placeholder="INGRESE DESCRIPCIÓN"
+          maxlength="100"
+          (input)="limitarCaracteres($event, 100)"
+          [class.input-error]="isFieldInvalid('descripcion')"
+          style="text-transform: uppercase;"
+        />
+      </nz-input-group>
+
+      <div class="error-message" *ngIf="isFieldInvalid('descripcion')">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+        {{ getErrorMessage('descripcion') }}
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="form-actions" style="border-top:0; padding-top:0; margin-top:12px;">
+      <button
+        nz-button
+        nzType="default"
+        type="button"
+        (click)="cancelar()"
+        [disabled]="loading"
+        style="background:#6f6f6f; border-color:#6f6f6f; color:#fff;"
+      >
+        <i nz-icon nzType="close" style="margin-right: 4px;"></i>
+        CANCELAR
+      </button>
+
+      <button
+        *ngIf="modo !== 'consultar'"
+        nz-button
+        nzType="primary"
+        type="button"
+        (click)="guardar()"
+        [nzLoading]="loading"
+        style="background-color:#0d5a4a; border-color:#0d5a4a;"
+      >
+        <i nz-icon nzType="check" style="margin-right: 4px;"></i>
+        GUARDAR
+      </button>
+    </div>
+
+  </form>
+</div>

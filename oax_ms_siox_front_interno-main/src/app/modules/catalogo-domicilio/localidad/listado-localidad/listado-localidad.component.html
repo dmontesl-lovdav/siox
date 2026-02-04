@@ -1,0 +1,135 @@
+<!-- Alerta genérica arriba a la derecha -->
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+
+<!-- Contenedor de confirmaciones -->
+<app-confirmation-container></app-confirmation-container>
+<!-- Barra superior -->
+<div class="header-bar">
+  <h2 class="page-title">ADMINISTRADOR DE CATÁLOGO DE DE LOCALIDAD</h2>
+  <div class="action-buttons">
+    <div class="button-row">
+      <button nz-button class="btn-nuevo" (click)="nuevoLocalidad()" nz-tooltip nzTooltipTitle="Nuevo registro del catálogo de Género">
+        <i nz-icon nzType="plus"></i>
+        NUEVO REGISTRO
+      </button>
+    </div>
+    <div class="botones-secundarios">
+      <button class="icon-button" title="Actualizar" (click)="actualizarTabla()" nz-tooltip nzTooltipTitle="Actualizar datos de la tabla">
+        <i nz-icon nzType="redo" nzTheme="outline"></i>
+      </button>
+      <button class="icon-button" title="Exportar Excel" (click)="exportarExcel()" nz-tooltip nzTooltipTitle="Exportar Registros a Excel">
+        <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+      </button>
+      <button class="icon-button" title="Exportar PDF" (click)="exportarPdf()" nz-tooltip nzTooltipTitle="Exportar Registros a PDF">
+        <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Botón de bloqueo/desbloqueo masivo a la izquierda de la tabla -->
+<div style="margin-bottom: 10px; display: flex; align-items: center;">
+  <button nz-button
+    class="btn-nuevo"
+    [disabled]="selectedIds.length === 0"
+    (click)="bloquearDesbloquearSeleccionados()"
+    nz-tooltip
+    [nzTooltipTitle]="selectedEstatus ? 'Bloquear registros seleccionados' : 'Desbloquear registros seleccionados'"
+    [ngStyle]="selectedIds.length === 0 ? {
+      backgroundColor: '#bdbdbd',
+      color: '#fff',
+      border: 'none',
+      cursor: 'not-allowed'
+    } : {
+      backgroundColor: 'var(--btn-primary-bg, #0d5a4a)',
+      color: 'var(--btn-primary-fg, #fff)',
+      border: 'none'
+    }"
+    style="margin-right: 16px;"
+  >
+    <i nz-icon [nzType]="selectedEstatus ? 'lock' : 'unlock'" [ngStyle]="selectedIds.length === 0 ? { color: '#fff' } : { color: 'var(--btn-primary-fg, #fff)' }"></i>
+    {{ selectedEstatus ? 'BLOQUEAR SELECCIONADOS' : 'DESBLOQUEAR SELECCIONADOS' }}
+  </button>
+</div>
+<br>
+
+<!-- Tabla -->
+<app-dynamic-table #tabla
+  [data]="data"
+  [columns]="colsLocalidad"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex + 1"
+  [frontPagination]="false"
+  [total]="total"
+  [scrollX]="'1200px'"
+  (sortChange)="onSortChange($event)"
+  (filterChange)="onFiltroServicioChange($event)"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+>
+</app-dynamic-table>
+
+<!-- Template para columna de selección -->
+<ng-template #seleccionTemplate let-row="row">
+  <label>
+    <input type="checkbox"
+      [checked]="row._checked"
+      (change)="onSelectRow(row, $event.target.checked)"
+      [disabled]="selectedEstatus !== null && row.estatus !== selectedEstatus"
+    />
+  </label>
+</ng-template>
+<!-- Template para acciones (editar, ver detalle) -->
+<ng-template #actionsTemplate let-row="row">
+  <button nz-tooltip nzTooltipTitle="Editar"
+    *ngIf="row.estatus"
+    nz-button
+    nzType="text"
+    (click)="editarGenero(row)"
+    title="Editar"
+    class="action-btn-edit"
+  >
+    <i nz-icon nzType="edit" nzTheme="outline"></i>
+  </button>
+  <button
+  *ngIf="!row.estatus"
+  nz-tooltip nzTooltipTitle="Consultar"
+    nz-button
+    nzType="text"
+    (click)="verDetalle(row)"
+    title="Ver Detalle"
+    class="action-btn-view"
+  >
+    <i nz-icon nzType="eye" nzTheme="outline"></i>
+  </button>
+</ng-template>
+<!-- Template para columna bloqueada (candados) -->
+<ng-template #bloqueadaTemplate let-row="row">
+  <button
+    nz-button
+    nzType="text"
+    (click)="toggleBloqueo(row)"
+    title="{{ row.estatus ? 'Desbloquear' : 'Bloquear' }}"
+    nz-tooltip
+    nzTooltipTitle="{{ row.estatus ? 'Desbloqueado' : 'Bloqueado' }}"
+    class="action-btn-lock"
+  >
+    <i 
+      nz-icon 
+      [nzType]="row.estatus ? 'unlock' : 'lock'" 
+      nzTheme="fill"
+    ></i>
+  </button>
+</ng-template>
+
+

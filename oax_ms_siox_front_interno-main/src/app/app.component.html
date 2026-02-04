@@ -1,0 +1,19 @@
+<div *ngIf="showSpinner" class="spinner-overlay">
+  <div class="spinner-dual-ring">
+    <div class="ring"></div>
+    <div class="ring ring2"></div>
+    <div class="ring ring3"></div>
+  </div>
+    <div class="spinner-dual-ring-text">
+      Cargando
+      <span class="spinner-dots">
+        <span class="spinner-dot"></span>
+        <span class="spinner-dot"></span>
+        <span class="spinner-dot"></span>
+      </span>
+    </div>
+</div>
+<router-outlet></router-outlet>
+
+<!-- Contenedor global de confirmaciones -->
+<app-confirmation-container></app-confirmation-container>

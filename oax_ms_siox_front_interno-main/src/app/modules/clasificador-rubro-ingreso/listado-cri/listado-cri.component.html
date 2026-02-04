@@ -1,0 +1,104 @@
+<!-- Alerta genérica arriba a la derecha -->
+<div class="alert-top-right">
+  <app-generic-alert
+    *ngIf="showAlert"
+    class="alert-animate"
+    [message]="alertMessage"
+    [type]="alertType"
+    [icon]="alertIcon"
+    [description]="alertDescription"
+    (closed)="closeAlert()"
+  ></app-generic-alert>
+</div>
+<!-- Título -->
+<h2 class="titulo-cri">CLASIFICADOR POR RUBRO DE INGRESO</h2>
+
+
+<!-- Template de acciones (debe declararse ANTES de usarse) -->
+<ng-template #accionesTpl let-row="row">
+  <button 
+    nz-button 
+    nzType="text"
+    (click)="editar(row)"
+    title="Editar"
+    class="action-btn-edit"
+  >
+    <i nz-icon nzType="edit"></i>
+  </button>
+</ng-template>
+
+<!-- Barra superior (ejercicio) -->
+<div class="header-bar" style="display: flex; justify-content: space-between; align-items: flex-end;">
+  <div class="input-wrapper">
+    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Ejercicio Fiscal</label>
+    <nz-select
+      [(ngModel)]="ejercicioSeleccionado"
+      (ngModelChange)="onEjercicioChange()"
+      nzPlaceHolder="EJERCICIO"
+      class="select-ejercicio"
+      nzSize="large"
+      style="min-width: 140px;"
+    >
+      <ng-container *ngIf="ejerciciosDisponibles && ejerciciosDisponibles.length > 0">
+        <nz-option *ngFor="let e of ejerciciosDisponibles" [nzLabel]="e" [nzValue]="e"></nz-option>
+      </ng-container>
+      <ng-container *ngIf="!ejerciciosDisponibles || ejerciciosDisponibles.length === 0">
+        <nz-option nzLabel="Sin años disponibles" nzValue=""></nz-option>
+      </ng-container>
+    </nz-select>
+  </div>
+
+  <!-- Botones alineados a la derecha, a la altura de la columna EDITAR -->
+  <div class="action-buttons" style="display: flex; flex-direction: column; align-items: flex-end;">
+    <div class="button-row" style="display: flex; gap: 1rem;">
+      <button nz-button class="btn-carga-masiva" (click)="cargaMasiva()">
+        <i nz-icon nzType="cloud-upload"></i>
+        Carga masiva CRI
+      </button>
+      <button nz-button class="btn-nuevo" (click)="nuevo()">
+        <i nz-icon nzType="plus"></i>
+        Nuevo CRI
+      </button>
+    </div>
+    <div class="botones-secundarios" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+  <button class="icon-button" title="Actualizar" (click)="actualizarTabla()">
+        <i nz-icon nzType="redo" nzTheme="outline"></i>
+      </button>
+      <button class="icon-button" title="Exportar Excel" (click)="exportarExcel()">
+        <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+      </button>
+  
+          <button class="icon-button" title="Exportar PDF" (click)="exportarPdf()">
+        <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla -->
+<app-dynamic-table #tabla
+  [data]="data"
+  [columns]="cols"
+  [actionsTemplate]="accionesTpl"
+  [actionsHeader]="'EDITAR'"
+  [pageSize]="pageSize"
+  [pageIndex]="getPageIndexForTable()"
+  [frontPagination]="false"
+  [total]="total"
+  [scrollX]="'1600px'"
+  (sortChange)="onSortChange($event)"
+  (filterChange)="onFiltroServicioChange($event)"
+  (pageIndexChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+>
+</app-dynamic-table>
+
+<!-- Modal de edición de clasificador -->
+<app-modal-edicion-clasificador
+  *ngIf="modalVisible"
+  [registro]="registroSeleccionado"
+  [origen]="origenSeleccionado"
+  (guardar)="onGuardarModal($event)"
+  (cancelar)="modalVisible = false">
+</app-modal-edicion-clasificador>
+

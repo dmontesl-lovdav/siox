@@ -1,0 +1,375 @@
+// Animación para mostrar alerta
+.alert-animate {
+  animation: alertFadeInScale 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes alertFadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.archivo-indicacion {
+  font-size: 15px;
+  color: #666;
+  font-weight: 500;
+  text-align: left;
+}
+.ejercicio-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.card-carga-archivo {
+  margin-top: 16px;
+  box-shadow: none;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card-carga-archivo.dragging {
+  border: 2px dashed #6bb98c;
+  background: #f0f9f4;
+  box-shadow: 0 4px 12px rgba(107, 185, 140, 0.2);
+}
+
+.archivo-hecho {
+  display: flex;
+  align-items: center;
+  color: #666;
+  font-size: 15px;
+  font-weight: 500;
+  gap: 4px;
+  text-align: left;
+}
+.archivo-cargado-row {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #e5e5e5;
+  padding: 12px 16px;
+  background: #fff;
+}
+
+.archivo-icon {
+  margin-right: 12px;
+}
+
+.archivo-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+.form-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 16px 24px;
+  border-bottom: 1px solid #e5e5e5;
+  gap: 18px;
+}
+}
+
+.archivo-nombre {
+  font-size: 14px;
+  color: #222;
+  font-weight: 500;
+}
+
+.archivo-validado {
+  font-size: 13px;
+  color: #21b21b;
+  font-weight: 500;
+.select-row {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+}
+
+.archivo-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.archivo-action {
+  cursor: pointer;
+  font-size: 20px;
+  color: #1890ff;
+  transition: color 0.2s;
+}
+.archivo-action:hover {
+  color: #ff4d4f;
+}
+// Alert en esquina superior derecha
+.alert-top-right {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 2000;
+  min-width: 320px;
+  max-width: 400px;
+}
+/* Select moderno */
+.select-ejercicio {
+  min-width: 180px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  font-size: 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.carga-masiva-cri-container {
+  display: flex;
+  flex-direction: column;
+.archivo-hecho {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  color: #666;
+  font-size: 15px;
+  font-weight: 500;
+  gap: 4px;
+}
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background: #f7f7f7;
+  overflow-x: hidden;
+  width: 100vw;
+  box-sizing: border-box;
+}
+.header-top {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 24px auto;
+  display: flex;
+  flex-direction: column;
+.archivo-cargado-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  background: #fff;
+}
+  align-items: flex-start;
+}
+.descarga-actions {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+.archivo-icon {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+}
+  justify-content: flex-end;
+  width: 100%;
+}
+.titulo-cri {
+  color: #b48c5a;
+  font-size: 1.7rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  width: 100%;
+.archivo-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+}
+.card-content {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 2rem 1rem;
+  max-width: 95vw;
+  width: 100%;
+  margin: 40px auto 0 auto;
+  display: flex;
+.archivo-nombre {
+  font-size: 14px;
+  color: #222;
+  font-weight: 500;
+  word-break: break-all;
+}
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+.footer-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  width: 95vw;
+  max-width: 700px;
+  margin-top: 24px;
+}
+/* Botones principales */
+.btn-examinar {
+  background: #fff;
+  color: #6bb98c;
+  border: 2px solid #6bb98c;
+  min-width: 120px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.btn-examinar:hover {
+  background: #6bb98c;
+  color: #fff;
+  border: 2px solid #4e9c6e;
+}
+.btn-cargar {
+  background: #6bb98c;
+  color: #fff;
+  min-width: 120px;
+  height: 38px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none;
+  transition: background 0.2s;
+}
+.btn-cargar:hover {
+  background: #4e9c6e;
+}
+.btn-regresar {
+  background: #bdbdbd;
+  color: #333;
+  min-width: 120px;
+  height: 38px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none;
+  transition: background 0.2s;
+}
+.btn-regresar:hover {
+  background: #8c8c8c;
+}
+.btn-carga-masiva {
+  background: #6bb98c;
+  color: #fff;
+  min-width: 240px;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-carga-masiva i[nz-icon] {
+  color: #fff;
+  font-size: 18px;
+}
+.btn-carga-masiva:hover {
+  background: #4e9c6e;
+  color: #fff;
+}
+.btn-nuevo {
+  background: #005c43;
+  color: #fff;
+  min-width: 240px;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-nuevo i[nz-icon] {
+  color: #fff;
+  font-size: 18px;
+}
+.btn-nuevo:hover {
+  background: #003c2c;
+  color: #fff;
+}
+.form-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 16px 24px;
+  border-bottom: 1px solid #e5e5e5;
+  gap: 18px;
+}
+.select-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.label-ejercicio {
+  font-size: 16px;
+  font-weight: 500;
+}
+.info-banner {
+  background: #2176d2;
+  color: #fff;
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 15px;
+  margin-bottom: 24px;
+  text-align: center;
+  width: 100%;
+}
+.card-info {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 24px;
+  color: #222;
+}
+@media (max-width: 900px) {
+  .card-content {
+    max-width: 99vw;
+    padding: 1rem 0.5rem;
+  }
+  .footer-actions {
+    width: 99vw;
+    max-width: 99vw;
+    padding: 0 0.5rem;
+  }
+  .descarga-actions {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+}
+.fila-examinar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 32px;
+  padding: 32px 24px 16px 24px;
+  border-bottom: 1px solid #e5e5e5;
+}
